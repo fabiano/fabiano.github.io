@@ -6,13 +6,15 @@ This changes when we have to create more than one website with the same configur
 
 Luckily, we can use the Web Server Administration module (WebAdministration) to automate the process. This module includes several cmdlets that let us manage the configuration and run-time data of IIS.
 
-We can use these cmdlets inside your scripts or from the command line. Let's start with the former. Open an elevated PowerShell prompt and type the command:
+The module also implements a virtual drive named `IIS` that we can use to access the application pools (AppPools), websites (Sites), and SSL bindinds (SslBindings) like a file system drive. 
+
+The cmdlets can be used inside scripts or in the command line. We will start with the former. Open an elevated PowerShell prompt and type the command:
 
 ```powershell
 > Import-Module WebAdministration
 ```
 
-The module also implements a virtual drive named `IIS` that we can use to access the application pools (AppPools), websites (Sites), and SSL bindinds (SslBindings) like a file system drive. You can use the `Get-ChildItem` cmdlet to list some items.
+You can use the `Get-ChildItem` cmdlet to list some items.
 
 ```powershell
 > Get-ChildItem IIS:\\
@@ -40,7 +42,7 @@ Now that the module was loaded we can move forward.
 
 ## Creating a website
 
-Let's start creating a simple website to get used with the commands.
+Let's start creating a simple website to get used with the cmdlets.
 
 ```powershell
 > New-Item -Type "Directory" -Path "C:\inetpub\wwwroot\demo01"
@@ -71,4 +73,3 @@ And customize the pool properties using the `Set-ItemProperty` cmdlet.
 Here you can find a list of all available properties: https://docs.microsoft.com/en-us/iis/configuration/system.applicationHost/applicationPools/add/#configuration
 
 ## Writing our first script
-
