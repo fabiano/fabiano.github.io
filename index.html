@@ -1,11 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
   <title>fabiano.rio.br</title>
+  <style>
+    img.avatar {
+      max-height: none;
+    }
+  </style>
 </head>
 <body>
+  <nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <div class="navbar-item is-hidden-mobile">
+          <figure class="image is-96x96">
+            <img class="avatar is-rounded" src="assets/avatar-300x300.jpg">
+          </figure>
+        </div>
+        <div class="navbar-item">
+          <span class="is-hidden-mobile is-hidden-tablet-only is-size-4 has-text-weight-semibold">Fabiano França</span>
+          <span class="is-hidden-desktop is-size-5 has-text-weight-semibold">Fabiano França</span>
+        </div>
+        <a role="button" class="navbar-burger has-text-dark" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item">Home</a>
+          <a class="navbar-item">About</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Latest posts</h1>
+      <h2 class="subtitle">2 posts</h2>
+      <div class="content">
+        <ul>
+        <li>
+          <a class="has-text-dark is-size-5" href="posts/writing-a-plugin-with-ecmascript-2018-webpack-and-babel.html">Writing a plugin with ECMAScript 2018, Webpack, and Babel</a>
+          <span class="is-size-6 has-text-grey">09/02/2018</span>
+        </p>
+        <li>
+          <a class="has-text-dark is-size-5" href="posts/automate-the-iis-configuration-with-powershell.html">Automate the IIS configuration with PowerShell</a>
+          <span class="is-size-6 has-text-grey">09/01/2018</span>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
