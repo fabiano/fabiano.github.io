@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quadrinhos</title>
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/bulma.min.css" />
@@ -23,10 +23,8 @@
     <div class="container">
       <nav class="level">
         <div class="level-item has-text-centered">
-          <div>
-            <img class="is-hidden-mobile is-hidden-tablet-only" src="assets/icon-128x128.png" alt="Quadrinhos">
-            <img class="is-hidden-desktop" src="assets/icon-64x64.png" alt="Quadrinhos">
-          </div>
+          <img class="is-hidden-mobile is-hidden-tablet-only" src="assets/icon-128x128.png" alt="Quadrinhos">
+          <img class="is-hidden-desktop" src="assets/icon-64x64.png" alt="Quadrinhos">
         </div>
         <div class="level-item has-text-centered">
           <div>
@@ -63,6 +61,7 @@
     <section class="section">
       <div class="container">
         <h1 class="title is-uppercase">Recentes</h1>
+        <div class="table-wrapper">
         <table class="table is-bordered is-hoverable is-fullwidth">
           <thead>
             <tr>
@@ -77,6 +76,7 @@
           <tbody id="latest-rows">
           </tbody>
         </table>
+        </div>
       </div>
     </section>
     <footer class="footer">
@@ -131,14 +131,18 @@
         range: SPREADSHEET_RANGE,
       });
 
-      const rows = document.getElementById("latest-rows");
-      const stats = { total: values.length, paper: 0, digital: 0, pages: 0, issues: 0 };
+      let totalPaper = 0;
+      let totalDigital = 0;
+      let totalPages = 0;
+      let totalIssues = 0;
 
-      for (const [date, publisher, title, pages, issues, format, href] of values) {
+      const rows = document.getElementById("latest-rows");
+
+      for (const [date, publisher, title, pages, issues, format, href = "#"] of values) {
         const row = createElement("tr", {}, [
           createElement("td", {}, [date]),
           createElement("td", {}, [publisher]),
-          createElement("td", {}, [createElement("a", { href }, title)]),
+          createElement("td", {}, [createElement("a", { href }, [title])]),
           createElement("td", {}, [pages]),
           createElement("td", {}, [issues]),
           createElement("td", {}, [format]),
@@ -147,20 +151,20 @@
         rows.insertBefore(row, rows.firstChild);
 
         if (format === "Digital") {
-          stats.digital += 1;
+          totalDigital += 1;
         } else {
-          stats.paper += 1;
+          totalPaper += 1;
         }
 
-        stats.pages += parseInt(pages, 10);
-        stats.issues += parseInt(issues, 10);
+        totalPages += parseInt(pages, 10);
+        totalIssues += parseInt(issues, 10);
       }
 
-      document.getElementById("stats-total").innerText = stats.total;
-      document.getElementById("stats-paper").innerText = stats.paper;
-      document.getElementById("stats-digital").innerText = stats.digital;
-      document.getElementById("stats-pages").innerText = stats.pages;
-      document.getElementById("stats-issues").innerText = stats.issues;
+      document.getElementById("stats-total").innerText = values.length;
+      document.getElementById("stats-paper").innerText = totalPaper;
+      document.getElementById("stats-digital").innerText = totalDigital;
+      document.getElementById("stats-pages").innerText = totalPages;
+      document.getElementById("stats-issues").innerText = totalIssues;
     }
 
     gapi.load("client", onLoad);
