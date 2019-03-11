@@ -10,16 +10,11 @@
     img.is-hidden-mobile {
       max-height: none !important;
     }
-    nav.level {
-      margin: 2em auto auto auto;
-    }
-    div.table-wrapper {
-      overflow-x: auto;
-    }
   </style>
 </head>
 <body>
   <div>
+    <progress class="progress is-small is-primary is-radiusless" id="progress" max="100">100%</progress>
     <div class="container">
       <nav class="level">
         <div class="level-item has-text-centered">
@@ -61,21 +56,21 @@
     <section class="section">
       <div class="container">
         <h1 class="title is-uppercase">Recentes</h1>
-        <div class="table-wrapper">
-        <table class="table is-bordered is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Editora</th>
-              <th>Título</th>
-              <th>No. de páginas</th>
-              <th>No. de edições</th>
-              <th>Formato</th>
-            </tr>
-          </thead>
-          <tbody id="latest-rows">
-          </tbody>
-        </table>
+        <div class="table-container">
+          <table class="table is-bordered is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Editora</th>
+                <th>Título</th>
+                <th>No. de páginas</th>
+                <th>No. de edições</th>
+                <th>Formato</th>
+              </tr>
+            </thead>
+            <tbody id="latest-rows">
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -165,6 +160,7 @@
       document.getElementById("stats-digital").innerText = totalDigital;
       document.getElementById("stats-pages").innerText = totalPages;
       document.getElementById("stats-issues").innerText = totalIssues;
+      document.getElementById("progress").classList.add("is-invisible");
     }
 
     gapi.load("client", onLoad);
