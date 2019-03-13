@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🕕</title>
+  <link rel="stylesheet" href="assets/bulma.min.css" />
+</head>
+<body>
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <nav class="level" id="items"></nav>
+      </div>
+    </div>
+  </section>
+  <script src="assets/moment.min.js"></script>
+  <script src="assets/moment-timezone-with-data-2012-2022.min.js"></script>
+  <script>
+    const timezones = [
+      "America/Los_Angeles",
+      "America/New_York",
+      "America/Sao_Paulo",
+      "Europe/Lisbon",
+      "UTC"
+    ];
+
+    const map = new Map();
+    const now = moment();
+    const items = document.getElementById("items");
+
+    for (const timezone of timezones) {
+      const item = document.createElement("div");
+
+      item.className = "level-item has-text-centered";
+
+      const div = document.createElement("div");
+
+      item.appendChild(div);
+
+      const heading = document.createElement("p");
+
+      heading.className = "heading";
+
+      const headingText = document.createTextNode(timezone + " " + now.tz(timezone).format("Z"));
+
+      heading.appendChild(headingText);
+
+      div.appendChild(heading);
+
+      const title = document.createElement("p");
+
+      title.className = "title";
+
+      const titleText = document.createTextNode(now.tz(timezone).format("HH:mm:ss"));
+
+      title.appendChild(titleText);
+
+      div.appendChild(title);
+
+      items.appendChild(item);
+
+      map.set(timezone, titleText);
+    }
+
+    function updateTime() {
+      const now = moment();
+
+      for (const [key, value] of map.entries()) {
+        value.textContent = now.tz(key).format("HH:mm:ss");
+      }
+    }
+
+    window.setInterval(updateTime, 1000);
+  </script>
+</body>
+</html>
