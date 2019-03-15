@@ -109,6 +109,17 @@
 
       return element;
     }
+
+    function dayOfYear(date) {
+      const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const diff = Date.UTC(year, month, day) - Date.UTC(year, 0, 1);
+      const value = diff / oneDayInMilliseconds;
+
+      return value;
+    }
   </script>
   <script>
     async function onLoad() {
@@ -160,6 +171,7 @@
       document.getElementById("stats-digital").innerText = totalDigital;
       document.getElementById("stats-pages").innerText = totalPages;
       document.getElementById("stats-issues").innerText = totalIssues;
+
       document.getElementById("progress").classList.add("is-invisible");
     }
 
