@@ -3,17 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🕕</title>
-  <link rel="stylesheet" href="assets/bulma.min.css" />
+  <title>Relógio</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+    }
+
+    body, div, p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .items {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      min-height: 100vh;
+    }
+
+    .items .item {
+      text-align: center;
+    }
+
+    .items .item .heading {
+      font-size: 0.7rem;
+      letter-spacing: 0.1rem;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .items .item .title {
+      font-size: 2rem;
+    }
+  </style>
 </head>
 <body>
-  <section class="hero is-fullheight">
-    <div class="hero-body">
-      <div class="container">
-        <nav class="level" id="items"></nav>
-      </div>
-    </div>
-  </section>
+  <div class="items" id="items"></div>
   <script src="assets/moment.min.js"></script>
   <script src="assets/moment-timezone-with-data-2012-2022.min.js"></script>
   <script>
@@ -32,11 +61,7 @@
     for (const timezone of timezones) {
       const item = document.createElement("div");
 
-      item.className = "level-item has-text-centered";
-
-      const div = document.createElement("div");
-
-      item.appendChild(div);
+      item.className = "item";
 
       const heading = document.createElement("p");
 
@@ -46,7 +71,7 @@
 
       heading.appendChild(headingText);
 
-      div.appendChild(heading);
+      item.appendChild(heading);
 
       const title = document.createElement("p");
 
@@ -56,7 +81,7 @@
 
       title.appendChild(titleText);
 
-      div.appendChild(title);
+      item.appendChild(title);
 
       items.appendChild(item);
 
