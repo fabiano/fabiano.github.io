@@ -6,9 +6,12 @@
   <title>Relógio</title>
   <link rel="shortcut icon" href="favicon.ico">
   <style>
+    html {
+      font-size: 62.5%;
+    }
+
     body {
       font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 1rem;
     }
 
     body, div, p {
@@ -17,6 +20,7 @@
     }
 
     .items {
+      align-content: space-evenly;
       align-items: center;
       display: flex;
       flex-direction: row;
@@ -26,18 +30,19 @@
     }
 
     .items .item {
+      padding: 20px 40px;
       text-align: center;
     }
 
     .items .item .heading {
-      font-size: 0.7rem;
+      font-size: 1.15rem;
       letter-spacing: 0.1rem;
       margin-bottom: 5px;
       text-transform: uppercase;
     }
 
     .items .item .title {
-      font-size: 2rem;
+      font-size: 4.0rem;
     }
   </style>
 </head>
@@ -51,7 +56,7 @@
       "America/New_York",
       "America/Sao_Paulo",
       "Europe/Lisbon",
-      "UTC"
+      "UTC",
     ];
 
     const map = new Map();
