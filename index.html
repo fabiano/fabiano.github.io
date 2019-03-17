@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Olá. I'm Fabiano França. I'm a software developer who lives in Rio de Janeiro with my family and comics. Currently at Credova, doing a lot of C# and JavaScript.">
+  <meta name="description" content="I'm a software developer who lives in Rio de Janeiro. Currently at Credova doing a lot of C# and JavaScript.">
   <title>Olá. I'm Fabiano França.</title>
   <style>
     * {
@@ -17,12 +17,13 @@
 
     body {
       align-items: center;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
       justify-content: center;
       min-height: 100vh;
-      padding: 0 20px;
+      padding: 20px;
     }
 
     img {
@@ -34,12 +35,14 @@
       font-size: 5rem;
       margin-top: 25px;
       text-align: center;
+      width: 100%;
     }
 
     p {
       font-size: 2rem;
       margin-top: 15px;
       max-width: 640px;
+      width: 100%;
     }
   </style>
 </head>
@@ -47,10 +50,18 @@
   <img src="avatar.jpg">
   <h1>Olá. I'm Fabiano França.</h1>
   <p>
-    I'm a software developer who lives in Rio de Janeiro with my family and comics. Currently at <a href="https://credova.com">Credova</a>, doing a lot of C# and JavaScript.
+    I'm a software developer who lives in Rio de Janeiro. Currently at <a href="https://credova.com">Credova</a> doing a lot of C# and JavaScript.
   </p>
   <p>
-    You can catch me on <a href="https://github.com/fabiano">GitHub</a>, <a href="https://twitter.com/fabiano">Twitter</a>, <a href="https://www.linkedin.com/in/fabianobandeirafranca">LinkedIn</a> or <a href="https://stackoverflow.com/story/fabiano">Stack Overflow</a>. I'm always up to chat.
+    You can catch me on <a href="https://github.com/fabiano">GitHub</a>, <a href="https://twitter.com/fabiano">Twitter</a>, <a href="https://www.linkedin.com/in/fabianobandeirafranca">LinkedIn</a> or <a href="https://stackoverflow.com/story/fabiano">Stack Overflow</a>.
   </p>
+  <script>
+    const ua = navigator.userAgent;
+    const isMobileSafari = ua.match(/(iPhone|iPod|iPad).+AppleWebKit/) && !ua.match(/CriOS/);
+
+    if(isMobileSafari) {
+      document.querySelector("body").style.minHeight = 0;
+    }
+  </script>
 </body>
 </html>
