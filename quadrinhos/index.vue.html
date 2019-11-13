@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Os gibis que li recentemente">
+  <title>Quadrinhos</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" sizes="32x32" href="assets/icon-32x32.png">
+  <link rel="icon" sizes="16x16" href="assets/icon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <style>
+    /* https://github.com/vladocar/CSS-Mini-Reset */
+    html,body,div,form,fieldset,legend,label{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}th,td{text-align:left;vertical-align:top;}h1,h2,h3,h4,h5,h6,th,td,caption{font-weight:normal;}img{border:0;}
+
+    html {
+      font-size: 62.5%;
+    }
+
+    body {
+      color: #383838;
+      font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1.6rem;
+    }
+
+    h1 {
+      font-size: 4.0rem;
+    }
+
+    a {
+      color: #3273dc;
+      text-decoration: none;
+    }
+
+    .progress {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+    }
+
+    .progress.is-invisible {
+      display: none;
+    }
+
+    .container {
+      margin: auto;
+      width: 80%;
+    }
+
+    .stats {
+      align-content: space-evenly;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .stats .stats-item {
+      padding: 20px 40px;
+    }
+
+    .stats .stats-item .heading {
+      font-size: 1.2rem;
+      letter-spacing: 0.1rem;
+      margin: 0 0 5px 0;
+      text-transform: uppercase;
+    }
+
+    .stats .stats-item .title {
+      font-size: 4.0rem;
+      margin: 0;
+    }
+
+    .table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .table th, .table td {
+      border: 1px solid #e8e8e8;
+      padding: 10px;
+    }
+
+    .table th {
+      font-weight: bold;
+    }
+
+    .is-uppercase {
+      text-transform: uppercase;
+    }
+
+    .has-text-centered {
+      text-align: center;
+    }
+
+    .tag {
+      background-color: #f8f8f8;
+      border-radius: 5px;
+      float: right;
+      font-size: 0.75em;
+      margin-left: 5px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <progress class="progress" max="100" :class="{ 'is-invisible': !isLoading }"></progress>
+    <div class="container">
+      <nav class="stats">
+        <div class="stats-item has-text-centered">
+          <div>
+            <p class="heading">Total</p>
+            <p class="title">{{ total }}</p>
+          </div>
+        </div>
+        <div class="stats-item has-text-centered">
+          <div>
+            <p class="heading">Em papel</p>
+            <p class="title">{{ paper }}</p>
+          </div>
+        </div>
+        <div class="stats-item has-text-centered">
+          <div>
+            <p class="heading">Digital</p>
+            <p class="title">{{ digital }}</p>
+          </div>
+        </div>
+        <div class="stats-item has-text-centered">
+          <div>
+            <p class="heading">No. de páginas</p>
+            <p class="title">{{ pages }}</p>
+          </div>
+        </div>
+        <div class="stats-item has-text-centered">
+          <div>
+            <p class="heading">No. de edições</p>
+            <p class="title">{{ issues }}</p>
+          </div>
+        </div>
+      </nav>
+      <h1 class="title is-uppercase">Recentes</h1>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Editora</th>
+              <th>Título</th>
+              <th>No. de páginas</th>
+              <th>No. de edições</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in rows">
+              <td>{{ row.date }}</td>
+              <td>{{ row.publisher }}</td>
+              <td>
+                <a :href="row.href">{{ row.title }}</a><span class="tag">{{ row.format }}</span>
+              </td>
+              <td>{{ row.pages }}</td>
+              <td>{{ row.issues }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <footer class="footer">
+        <div class="container has-text-centered">
+          <p>Feito com <a class="has-text-dark" href="https://vuejs.org" title="Vue.js">Vue.js</a></p>
+          <p>Logo por <a class="has-text-dark" href="https://www.freepik.com" title="Freepik">Freepik</a> de <a class="has-text-dark" href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></p>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    const add = (x, y) => x + y;
+
+    const vm = new Vue({
+      el: "#app",
+      data: {
+        rows: [],
+        isLoading: false,
+      },
+      computed: {
+        total() {
+          return this.rows.length;
+        },
+        paper() {
+          return this.rows.filter(row => row.format !== "Digital").length;
+        },
+        digital() {
+          return this.rows.filter(row => row.format === "Digital").length;
+        },
+        pages() {
+          return this.rows.map(row => row.pages).reduce(add, 0);
+        },
+        issues() {
+          return this.rows.map(row => row.issues).reduce(add, 0);
+        },
+      },
+    });
+
+    async function onLoad() {
+      vm.isLoading = true;
+
+      const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
+      const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
+      const SPREADSHEET_RANGE = "2019!A2:G";
+
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+      });
+
+      const { result: { values } } = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: SPREADSHEET_RANGE,
+      });
+
+      const rows = values
+        .map(value => {
+          const [
+            date, publisher, title, pages, issues, format, href = "#"
+          ] = value;
+
+          return {
+            date,
+            publisher,
+            title,
+            pages: parseInt(pages, 10),
+            issues: parseInt(issues, 10),
+            format,
+            href,
+          };
+        })
+        .reverse();
+
+      vm.rows = rows;
+      vm.isLoading = false;
+    }
+
+    gapi.load("client", onLoad);
+  </script>
+</body>
+</html>
