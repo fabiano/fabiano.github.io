@@ -25,7 +25,9 @@
     }
 
     h1 {
-      font-size: 4.0rem;
+      font-size: 3.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
     }
 
     a {
@@ -35,8 +37,66 @@
 
     .progress {
       -webkit-appearance: none;
+      animation-direction: alternate-reverse;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-name: progress;
+      animation-timing-function: ease;
       appearance: none;
+      background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
+      display: block;
+      height: 1rem;
       width: 100%;
+    }
+
+    @keyframes progress {
+      0% {
+        background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
+      }
+
+      10% {
+        background: linear-gradient(to right, #00d1b2 10%, #f8f8f8 100%);
+      }
+
+      20% {
+        background: linear-gradient(to right, #00d1b2 20%, #f8f8f8 100%);
+      }
+
+      30% {
+        background: linear-gradient(to right, #00d1b2 30%, #f8f8f8 100%);
+      }
+
+      40% {
+        background: linear-gradient(to right, #00d1b2 40%, #f8f8f8 100%);
+      }
+
+      50% {
+        background: linear-gradient(to right, #00d1b2 50%, #f8f8f8 100%);
+      }
+
+      60% {
+        background: linear-gradient(to right, #00d1b2 60%, #f8f8f8 100%);
+      }
+
+      70% {
+        background: linear-gradient(to right, #00d1b2 70%, #f8f8f8 100%);
+      }
+
+      80% {
+        background: linear-gradient(to right, #00d1b2 80%, #f8f8f8 100%);
+      }
+
+      90% {
+        background: linear-gradient(to right, #00d1b2 90%, #f8f8f8 100%);
+      }
+
+      100% {
+        background: linear-gradient(to right, #00d1b2 100%, #f8f8f8 100%);
+      }
+    }
+
+    progress::-webkit-progress-bar {
+      background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
     }
 
     .progress.is-invisible {
@@ -45,7 +105,7 @@
 
     .container {
       margin: auto;
-      width: 80%;
+      width: 95%;
     }
 
     .stats {
@@ -58,6 +118,7 @@
 
     .stats .stats-item {
       padding: 20px 40px;
+      text-align: center;
     }
 
     .stats .stats-item .heading {
@@ -68,7 +129,8 @@
     }
 
     .stats .stats-item .title {
-      font-size: 4.0rem;
+      font-size: 3.5rem;
+      font-weight: 500;
       margin: 0;
     }
 
@@ -80,96 +142,98 @@
     .table th, .table td {
       border: 1px solid #e8e8e8;
       padding: 10px;
+      vertical-align: middle;
     }
 
     .table th {
-      font-weight: bold;
-    }
-
-    .is-uppercase {
-      text-transform: uppercase;
-    }
-
-    .has-text-centered {
-      text-align: center;
+      font-weight: 500;
     }
 
     .tag {
       background-color: #f8f8f8;
       border-radius: 5px;
-      float: right;
       font-size: 0.75em;
       margin-left: 5px;
       padding: 5px;
+      white-space: nowrap;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
   <div id="app">
     <progress class="progress" max="100" :class="{ 'is-invisible': !isLoading }"></progress>
+    <div class="progress"></div>
+    <div class="animated">
+      <h1>Hello</h1>
+
+ </div>
     <div class="container">
       <nav class="stats">
-        <div class="stats-item has-text-centered">
+        <div class="stats-item">
           <div>
             <p class="heading">Total</p>
             <p class="title">{{ total }}</p>
           </div>
         </div>
-        <div class="stats-item has-text-centered">
+        <div class="stats-item">
           <div>
             <p class="heading">Em papel</p>
             <p class="title">{{ paper }}</p>
           </div>
         </div>
-        <div class="stats-item has-text-centered">
+        <div class="stats-item">
           <div>
             <p class="heading">Digital</p>
             <p class="title">{{ digital }}</p>
           </div>
         </div>
-        <div class="stats-item has-text-centered">
+        <div class="stats-item">
           <div>
             <p class="heading">No. de páginas</p>
             <p class="title">{{ pages }}</p>
           </div>
         </div>
-        <div class="stats-item has-text-centered">
+        <div class="stats-item">
           <div>
             <p class="heading">No. de edições</p>
             <p class="title">{{ issues }}</p>
           </div>
         </div>
       </nav>
-      <h1 class="title is-uppercase">Recentes</h1>
-      <div class="table-container">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Editora</th>
-              <th>Título</th>
-              <th>No. de páginas</th>
-              <th>No. de edições</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in rows">
-              <td>{{ row.date }}</td>
-              <td>{{ row.publisher }}</td>
-              <td>
-                <a :href="row.href">{{ row.title }}</a><span class="tag">{{ row.format }}</span>
-              </td>
-              <td>{{ row.pages }}</td>
-              <td>{{ row.issues }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <h1 class="title">Recentes</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Editora</th>
+            <th>Título</th>
+            <th>No. de páginas</th>
+            <th>No. de edições</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows">
+            <td>{{ row.date }}</td>
+            <td>{{ row.publisher }}</td>
+            <td>
+              <div style="display: flex; align-items: center;">
+                  <a :href="row.href" style="flex-grow: 1;">{{ row.title }}</a>
+                  <span class="tag">{{ row.format }}</span>
+              </div>
+            </td>
+            <td>{{ row.pages }}</td>
+            <td>{{ row.issues }}</td>
+          </tr>
+        </tbody>
+      </table>
       <footer class="footer">
-        <div class="container has-text-centered">
-          <p>Feito com <a class="has-text-dark" href="https://vuejs.org" title="Vue.js">Vue.js</a></p>
-          <p>Logo por <a class="has-text-dark" href="https://www.freepik.com" title="Freepik">Freepik</a> de <a class="has-text-dark" href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></p>
-        </div>
+        <div>Feito com <a class="has-text-dark" href="https://vuejs.org" title="Vue.js">Vue.js</a></div>
+        <div>Logo por <a class="has-text-dark" href="https://www.freepik.com" title="Freepik">Freepik</a> de <a class="has-text-dark" href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
       </footer>
     </div>
   </div>
@@ -239,7 +303,7 @@
         .reverse();
 
       vm.rows = rows;
-      vm.isLoading = false;
+      // vm.isLoading = false;
     }
 
     gapi.load("client", onLoad);
