@@ -36,67 +36,26 @@
     }
 
     .progress {
-      -webkit-appearance: none;
-      animation-direction: alternate-reverse;
+      animation-direction: alternate;
       animation-duration: 1s;
       animation-iteration-count: infinite;
       animation-name: progress;
       animation-timing-function: ease;
       appearance: none;
-      background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
+      background-color: #00d1b2;
       display: block;
       height: 1rem;
-      width: 100%;
+      width: 0;
     }
 
     @keyframes progress {
-      0% {
-        background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
+      from {
+        width: 0;
       }
 
-      10% {
-        background: linear-gradient(to right, #00d1b2 10%, #f8f8f8 100%);
+      to {
+        width: 100%;
       }
-
-      20% {
-        background: linear-gradient(to right, #00d1b2 20%, #f8f8f8 100%);
-      }
-
-      30% {
-        background: linear-gradient(to right, #00d1b2 30%, #f8f8f8 100%);
-      }
-
-      40% {
-        background: linear-gradient(to right, #00d1b2 40%, #f8f8f8 100%);
-      }
-
-      50% {
-        background: linear-gradient(to right, #00d1b2 50%, #f8f8f8 100%);
-      }
-
-      60% {
-        background: linear-gradient(to right, #00d1b2 60%, #f8f8f8 100%);
-      }
-
-      70% {
-        background: linear-gradient(to right, #00d1b2 70%, #f8f8f8 100%);
-      }
-
-      80% {
-        background: linear-gradient(to right, #00d1b2 80%, #f8f8f8 100%);
-      }
-
-      90% {
-        background: linear-gradient(to right, #00d1b2 90%, #f8f8f8 100%);
-      }
-
-      100% {
-        background: linear-gradient(to right, #00d1b2 100%, #f8f8f8 100%);
-      }
-    }
-
-    progress::-webkit-progress-bar {
-      background: linear-gradient(to right, #00d1b2 0%, #f8f8f8 100%);
     }
 
     .progress.is-invisible {
@@ -166,12 +125,7 @@
 </head>
 <body>
   <div id="app">
-    <progress class="progress" max="100" :class="{ 'is-invisible': !isLoading }"></progress>
-    <div class="progress"></div>
-    <div class="animated">
-      <h1>Hello</h1>
-
- </div>
+    <div class="progress" :class="{ 'is-invisible': !isLoading }"></div>
     <div class="container">
       <nav class="stats">
         <div class="stats-item">
@@ -303,7 +257,7 @@
         .reverse();
 
       vm.rows = rows;
-      // vm.isLoading = false;
+      vm.isLoading = false;
     }
 
     gapi.load("client", onLoad);
