@@ -24,12 +24,6 @@
       font-size: 1.6rem;
     }
 
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 500;
-      text-transform: uppercase;
-    }
-
     a {
       color: #3273dc;
       text-decoration: none;
@@ -68,53 +62,80 @@
     }
 
     .stats {
-      align-content: space-evenly;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-evenly;
     }
 
-    .stats .stats-item {
+    .stats .item {
       padding: 20px 40px;
       text-align: center;
     }
 
-    .stats .stats-item .heading {
+    .stats .item .heading {
       font-size: 1.2rem;
       letter-spacing: 0.1rem;
       margin: 0 0 5px 0;
       text-transform: uppercase;
     }
 
-    .stats .stats-item .title {
+    .stats .item .title {
       font-size: 3.5rem;
       font-weight: 500;
       margin: 0;
     }
 
-    .table {
-      border-collapse: collapse;
-      width: 100%;
+    .cards {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
     }
 
-    .table th, .table td {
-      border: 1px solid #e8e8e8;
+    .cards .card {
+      border: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      height: 170px;
+      justify-content: space-between;
+      margin: 20px;
       padding: 10px;
-      vertical-align: middle;
+      text-align: center;
+      width: 190px;
     }
 
-    .table th {
-      font-weight: 500;
+    .cards .card .number {
+      font-size: 0.60em;
+      margin-bottom: 5px;
     }
 
-    .tag {
-      background-color: #f8f8f8;
-      border-radius: 5px;
+    .cards .card .number span {
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cards .card .date {
       font-size: 0.75em;
-      margin-left: 5px;
-      padding: 5px;
-      white-space: nowrap;
+    }
+
+    .cards .card .title {
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .cards .card .publisher {
+      font-size: 0.75em;
+    }
+
+    .cards .card .format {
+      font-size: 0.75em;
+    }
+
+    .cards .card .pages {
+      font-size: 0.75em;
     }
 
     .footer {
@@ -128,63 +149,48 @@
     <div class="progress" :class="{ 'is-invisible': !isLoading }"></div>
     <div class="container">
       <nav class="stats">
-        <div class="stats-item">
-          <div>
-            <p class="heading">Total</p>
-            <p class="title">{{ total }}</p>
-          </div>
+        <div class="item">
+          <p class="heading">Total</p>
+          <p class="title">{{ total }}</p>
         </div>
-        <div class="stats-item">
-          <div>
-            <p class="heading">Em papel</p>
-            <p class="title">{{ paper }}</p>
-          </div>
+        <div class="item">
+          <p class="heading">Em papel</p>
+          <p class="title">{{ paper }}</p>
         </div>
-        <div class="stats-item">
-          <div>
-            <p class="heading">Digital</p>
-            <p class="title">{{ digital }}</p>
-          </div>
+        <div class="item">
+          <p class="heading">Digital</p>
+          <p class="title">{{ digital }}</p>
         </div>
-        <div class="stats-item">
-          <div>
-            <p class="heading">No. de páginas</p>
-            <p class="title">{{ pages }}</p>
-          </div>
+        <div class="item">
+          <p class="heading">No. de páginas</p>
+          <p class="title">{{ pages }}</p>
         </div>
-        <div class="stats-item">
-          <div>
-            <p class="heading">No. de edições</p>
-            <p class="title">{{ issues }}</p>
-          </div>
+        <div class="item">
+          <p class="heading">No. de edições</p>
+          <p class="title">{{ issues }}</p>
         </div>
       </nav>
-      <h1 class="title">Recentes</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Editora</th>
-            <th>Título</th>
-            <th>No. de páginas</th>
-            <th>No. de edições</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in rows">
-            <td>{{ row.date }}</td>
-            <td>{{ row.publisher }}</td>
-            <td>
-              <div style="display: flex; align-items: center;">
-                  <a :href="row.href" style="flex-grow: 1;">{{ row.title }}</a>
-                  <span class="tag">{{ row.format }}</span>
+      <div class="cards">
+        <div class="card" v-for="(row, index) in rows">
+          <div class="card-header">
+              <div class="number">
+                <span>#{{ rows.length - index }}</span>
               </div>
-            </td>
-            <td>{{ row.pages }}</td>
-            <td>{{ row.issues }}</td>
-          </tr>
-        </tbody>
-      </table>
+              <div class="date">{{ row.date }}</div>
+          </div>
+          <div class="card-body">
+            <div class="title">
+              <a :href="row.href">{{ row.title }}</a>
+            </div>
+            <div class="publisher format">
+              {{ row.publisher }} / {{ row.format }}
+            </div>
+          </div>
+          <div class="card-footer">
+              <div class="pages">{{ row.pages }} páginas e {{ row.issues }} edições</div>
+          </div>
+        </div>
+      </div>
       <footer class="footer">
         <div>Feito com <a class="has-text-dark" href="https://vuejs.org" title="Vue.js">Vue.js</a></div>
         <div>Logo por <a class="has-text-dark" href="https://www.freepik.com" title="Freepik">Freepik</a> de <a class="has-text-dark" href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
