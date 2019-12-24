@@ -10,108 +10,174 @@
   <link rel="icon" sizes="32x32" href="assets/icon-32x32.png">
   <link rel="icon" sizes="16x16" href="assets/icon-16x16.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="assets/bulma.min.css" />
   <style>
-    img.is-hidden-mobile {
-      max-height: none !important;
+    /* https://github.com/vladocar/CSS-Mini-Reset */
+    html,body,div,form,fieldset,legend,label{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}th,td{text-align:left;vertical-align:top;}h1,h2,h3,h4,h5,h6,th,td,caption{font-weight:normal;}img{border:0;}
+
+    html {
+      font-size: 62.5%;
+    }
+
+    body {
+      color: #383838;
+      font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1.6rem;
+    }
+
+    a {
+      color: #3273dc;
+      text-decoration: none;
+    }
+
+    .progress {
+      animation-direction: alternate;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-name: progress;
+      animation-timing-function: ease;
+      appearance: none;
+      background-color: #00d1b2;
+      display: block;
+      height: 1rem;
+      width: 0;
+    }
+
+    @keyframes progress {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    .progress.is-invisible {
+      display: none;
+    }
+
+    .container {
+      margin: auto;
+      width: 95%;
+    }
+
+    .stats {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .stats .item {
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    .stats .item .heading {
+      font-size: 1.2rem;
+      letter-spacing: 0.1rem;
+      margin: 0 0 5px 0;
+      text-transform: uppercase;
+    }
+
+    .stats .item .value {
+      font-size: 3.5rem;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .cards .card {
+      border: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      height: 170px;
+      justify-content: space-between;
+      margin: 20px;
+      padding: 10px;
+      text-align: center;
+      width: 190px;
+    }
+
+    .cards .card .number {
+      font-size: 0.60em;
+      margin-bottom: 5px;
+    }
+
+    .cards .card .number span {
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cards .card .date {
+      font-size: 0.75em;
+    }
+
+    .cards .card .title {
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .cards .card .publisher {
+      font-size: 0.75em;
+    }
+
+    .cards .card .format {
+      font-size: 0.75em;
+    }
+
+    .cards .card .pages {
+      font-size: 0.75em;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
-  <div>
-    <progress class="progress is-small is-primary is-radiusless" id="progress" max="100">100%</progress>
+  <div id="app">
+    <div class="progress" id="progress"></div>
     <div class="container">
-      <nav class="level">
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Total</p>
-            <p class="title" id="stats-total">0</p>
-          </div>
+      <nav class="stats" id="stats">
+        <div class="item">
+          <p class="heading">Total</p>
+          <p class="value" id="stats-total">0</p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Em papel</p>
-            <p class="title" id="stats-paper">0</p>
-          </div>
+        <div class="item">
+          <p class="heading">Em papel</p>
+          <p class="value" id="stats-paper">0</p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Digital</p>
-            <p class="title" id="stats-digital">0</p>
-          </div>
+        <div class="item">
+          <p class="heading">Digital</p>
+          <p class="value" id="stats-digital">0</p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">No. de páginas</p>
-            <p class="title" id="stats-pages">0</p>
-          </div>
+        <div class="item">
+          <p class="heading">No. de páginas</p>
+          <p class="value" id="stats-pages">0</p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">No. de edições</p>
-            <p class="title" id="stats-issues">0</p>
-          </div>
+        <div class="item">
+          <p class="heading">No. de edições</p>
+          <p class="value" id="stats-issues">0</p>
         </div>
       </nav>
+      <div class="cards" id="latest-rows">
+      </div>
+      <footer class="footer">
+        <div>Logo por <a href="https://www.freepik.com" title="Freepik">Freepik</a> de <a href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
+      </footer>
     </div>
-    <section class="section">
-      <div class="container">
-        <h1 class="title is-uppercase">Recentes</h1>
-        <div class="table-container">
-          <table class="table is-bordered is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Editora</th>
-                <th>Título</th>
-                <th>No. de páginas</th>
-                <th>No. de edições</th>
-                <th>Formato</th>
-              </tr>
-            </thead>
-            <tbody id="latest-rows">
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-    <footer class="footer">
-      <div class="container has-text-centered">
-        <p>Feito com <a class="has-text-dark" href="https://bulma.io" title="Bulma">Bulma</a></p>
-        <p>Logo por <a class="has-text-dark" href="https://www.freepik.com" title="Freepik">Freepik</a> de <a class="has-text-dark" href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></p>
-      </div>
-    </footer>
   </div>
   <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    function createElement(tagName, attributes, ...children) {
-      const element = document.createElement(tagName);
-
-      if (attributes) {
-        const { className, ...attrs } = attributes;
-
-        if (className) {
-          element.className = className;
-        }
-
-        for (const key of Object.keys(attrs)) {
-          const value = attrs[key];
-
-          element.setAttribute(key, value);
-        }
-      }
-
-      for (const child of children) {
-        if (child instanceof Node) {
-          element.appendChild(child);
-        } else {
-          element.appendChild(document.createTextNode(child));
-        }
-      }
-
-      return element;
-    }
-  </script>
   <script>
     async function onLoad() {
       const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
@@ -128,41 +194,90 @@
         range: SPREADSHEET_RANGE,
       });
 
-      let totalPaper = 0;
-      let totalDigital = 0;
-      let totalPages = 0;
-      let totalIssues = 0;
+      const rows = values
+        .map((value, index) => {
+          const [
+            date, publisher, title, pages, issues, format, href = "#"
+          ] = value;
 
-      const rows = document.getElementById("latest-rows");
+          return {
+            number: index + 1,
+            date,
+            publisher,
+            title,
+            pages: parseInt(pages, 10),
+            issues: parseInt(issues, 10),
+            format,
+            href,
+          };
+        });
 
-      for (const [date, publisher, title, pages, issues, format, href = "#"] of values) {
-        const row = createElement("tr", {},
-          createElement("td", {}, date),
-          createElement("td", {}, publisher),
-          createElement("td", {}, createElement("a", { href }, [title])),
-          createElement("td", {}, pages),
-          createElement("td", {}, issues),
-          createElement("td", {}, format),
-        );
+      const latestRows = document.getElementById("latest-rows");
 
-        rows.insertBefore(row, rows.firstChild);
+      for (const { number, date, publisher, title, pages, issues, format, href } of rows) {
+        const template = `
+          <div class="card">
+            <div class="card-header">
+                <div class="number">
+                  <span>#${number}</span>
+                </div>
+                <div class="date">${date}</div>
+            </div>
+            <div class="card-body">
+              <div class="title">
+                <a href="${href}">${title}</a>
+              </div>
+              <div class="publisher format">
+                ${publisher} / ${format}
+              </div>
+            </div>
+            <div class="card-footer">
+                <div class="pages">${pages} páginas e ${issues} edições</div>
+            </div>
+          </div>
+        `;
 
-        if (format === "Digital") {
-          totalDigital += 1;
-        } else {
-          totalPaper += 1;
-        }
+        const row = document.createElement("div");
 
-        totalPages += parseInt(pages, 10);
-        totalIssues += parseInt(issues, 10);
+        row.innerHTML = template;
+
+        latestRows.insertBefore(row, latestRows.firstChild);
       }
 
-      document.getElementById("stats-total").innerText = values.length;
-      document.getElementById("stats-paper").innerText = totalPaper;
-      document.getElementById("stats-digital").innerText = totalDigital;
-      document.getElementById("stats-pages").innerText = totalPages;
-      document.getElementById("stats-issues").innerText = totalIssues;
-      document.getElementById("progress").classList.add("is-invisible");
+      const add = (x, y) => x + y;
+
+      document
+        .getElementById("stats-total")
+        .innerText = rows.length;
+
+      document
+        .getElementById("stats-paper")
+        .innerText = rows
+          .filter(row => row.format !== "Digital")
+          .length;
+
+      document
+        .getElementById("stats-digital")
+        .innerText = rows
+          .filter(row => row.format === "Digital")
+          .length;
+
+      document
+        .getElementById("stats-pages")
+        .innerText = rows
+          .map(row => row.pages)
+          .reduce(add, 0);
+
+      document
+        .getElementById("stats-issues")
+        .innerText = rows
+          .map(row => row.issues)
+          .reduce(add, 0);
+
+      document
+        .getElementById("progress")
+        .classList
+        .add("is-invisible");
     }
 
     gapi.load("client", onLoad);
