@@ -90,7 +90,7 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: space-evenly;
+      justify-content: center;
     }
 
     .cards .card {
@@ -182,7 +182,7 @@
     async function onLoad() {
       const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
       const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
-      const SPREADSHEET_RANGE = "2019!A2:G";
+      const SPREADSHEET_RANGE = "2020!A2:G";
 
       await gapi.client.init({
         apiKey: API_KEY,
