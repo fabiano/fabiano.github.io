@@ -56,9 +56,18 @@
       display: none;
     }
 
-    .container {
-      margin: auto;
-      width: 95%;
+    .header {
+      border-bottom: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .header h1 {
+      font-size: 8.5rem;
+      font-weight: 400;
+      margin: 20px 0;
+      text-align: center;
     }
 
     .stats {
@@ -91,6 +100,8 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
+      margin: auto;
+      width: 95%;
     }
 
     .cards .card {
@@ -124,6 +135,7 @@
     .cards .card .title {
       margin-bottom: 5px;
       text-transform: uppercase;
+      word-break: break-word;
     }
 
     .cards .card .publisher {
@@ -139,15 +151,16 @@
     }
 
     .footer {
+      margin: 0 0 20px 0;
       text-align: center;
-      margin: 20px 0;
     }
   </style>
 </head>
 <body>
   <div id="app">
     <div class="progress" id="progress"></div>
-    <div class="container">
+    <div class="header">
+      <h1>2020</h1>
       <nav class="stats" id="stats">
         <div class="item">
           <p class="heading">Total</p>
@@ -170,12 +183,12 @@
           <p class="value" id="stats-issues">0</p>
         </div>
       </nav>
-      <div class="cards" id="latest-rows">
-      </div>
-      <footer class="footer">
-        <div>Logo por <a href="https://www.freepik.com" title="Freepik">Freepik</a> de <a href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
-      </footer>
     </div>
+    <div class="cards" id="latest-rows">
+    </div>
+    <footer class="footer">
+      <div>Logo por <a href="https://www.freepik.com" title="Freepik">Freepik</a> de <a href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
+    </footer>
   </div>
   <script src="https://apis.google.com/js/api.js"></script>
   <script>
@@ -216,29 +229,28 @@
 
       for (const { number, date, publisher, title, pages, issues, format, href } of rows) {
         const template = `
-          <div class="card">
-            <div class="card-header">
-                <div class="number">
-                  <span>#${number}</span>
-                </div>
-                <div class="date">${date}</div>
-            </div>
-            <div class="card-body">
-              <div class="title">
-                <a href="${href}">${title}</a>
+          <div class="card-header">
+              <div class="number">
+                <span>#${number}</span>
               </div>
-              <div class="publisher format">
-                ${publisher} / ${format}
-              </div>
+              <div class="date">${date}</div>
+          </div>
+          <div class="card-body">
+            <div class="title">
+              <a href="${href}">${title}</a>
             </div>
-            <div class="card-footer">
-                <div class="pages">${pages} páginas e ${issues} edições</div>
+            <div class="publisher format">
+              ${publisher} / ${format}
             </div>
+          </div>
+          <div class="card-footer">
+              <div class="pages">${pages} páginas e ${issues} edições</div>
           </div>
         `;
 
         const row = document.createElement("div");
 
+        row.classList.add("card");
         row.innerHTML = template;
 
         latestRows.insertBefore(row, latestRows.firstChild);
