@@ -150,6 +150,10 @@
       font-size: 0.75em;
     }
 
+    .cards .card .issues {
+      font-size: 0.75em;
+    }
+
     .footer {
       margin: 0 0 20px 0;
       text-align: center;
@@ -160,7 +164,7 @@
   <div id="app">
     <div class="progress" id="progress"></div>
     <div class="header">
-      <h1>2020</h1>
+      <h1 id="header-year">2020</h1>
       <nav class="stats" id="stats">
         <div class="item">
           <p class="heading">Total</p>
@@ -184,7 +188,7 @@
         </div>
       </nav>
     </div>
-    <div class="cards" id="latest-rows">
+    <div class="cards" id="cards">
     </div>
     <footer class="footer">
       <div>Logo por <a href="https://www.freepik.com" title="Freepik">Freepik</a> de <a href="https://www.flaticon.com/free-icon/comic_626559" title="Flaticon">Flaticon</a></div>
@@ -192,43 +196,51 @@
   </div>
   <script src="https://apis.google.com/js/api.js"></script>
   <script>
-    async function onLoad() {
-      const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
-      const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
-      const SPREADSHEET_RANGE = "2020!A2:G";
+    const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
+    const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
 
-      await gapi.client.init({
-        apiKey: API_KEY,
-        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-      });
-
-      const { result: { values } } = await gapi.client.sheets.spreadsheets.values.get({
+    async function get(year) {
+      const response = await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: SPREADSHEET_RANGE,
+        range: `${year}!A2:G`,
       });
 
-      const rows = values
-        .map((value, index) => {
-          const [
-            date, publisher, title, pages, issues, format, href = "#"
-          ] = value;
+      return response.result.values;
+    }
 
-          return {
-            number: index + 1,
-            date,
-            publisher,
-            title,
-            pages: parseInt(pages, 10),
-            issues: parseInt(issues, 10),
-            format,
-            href,
-          };
-        });
+    function transform(rows) {
+      return rows.map((row, index) => {
+        const [
+          date, publisher, title, pages, issues, format, href = "#"
+        ] = row;
 
-      const latestRows = document.getElementById("latest-rows");
+        return {
+          number: index + 1,
+          date,
+          publisher,
+          title,
+          pages: parseInt(pages, 10),
+          issues: parseInt(issues, 10),
+          format,
+          href,
+        };
+      });
+    }
+
+    function render(rows) {
+      renderRows(rows);
+      renderStats(rows);
+    }
+
+    function renderRows(rows) {
+      const cards = document.getElementById("cards");
 
       for (const { number, date, publisher, title, pages, issues, format, href } of rows) {
-        const template = `
+        const card = document.createElement("div");
+
+        card.classList.add("card");
+
+        card.innerHTML = `
           <div class="card-header">
               <div class="number">
                 <span>#${number}</span>
@@ -244,20 +256,15 @@
             </div>
           </div>
           <div class="card-footer">
-              <div class="pages">${pages} páginas e ${issues} edições</div>
+              <div class="pages issues">${pages} páginas e ${issues} edições</div>
           </div>
         `;
 
-        const row = document.createElement("div");
-
-        row.classList.add("card");
-        row.innerHTML = template;
-
-        latestRows.insertBefore(row, latestRows.firstChild);
+        cards.insertBefore(card, cards.firstChild);
       }
+    }
 
-      const add = (x, y) => x + y;
-
+    function renderStats(rows) {
       document
         .getElementById("stats-total")
         .innerText = rows.length;
@@ -274,6 +281,8 @@
           .filter(row => row.format === "Digital")
           .length;
 
+      const add = (x, y) => x + y;
+
       document
         .getElementById("stats-pages")
         .innerText = rows
@@ -285,6 +294,20 @@
         .innerText = rows
           .map(row => row.issues)
           .reduce(add, 0);
+    }
+
+    async function onClientLoad() {
+      document
+        .getElementById("progress")
+        .classList
+        .remove("is-invisible");
+
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+      });
+
+      render(transform(await get(2020)));
 
       document
         .getElementById("progress")
@@ -292,7 +315,7 @@
         .add("is-invisible");
     }
 
-    gapi.load("client", onLoad);
+    gapi.load("client", onClientLoad);
   </script>
 </body>
 </html>
