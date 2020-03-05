@@ -155,7 +155,7 @@
     }
 
     .footer {
-      margin: 0 0 20px 0;
+      margin: 20px 0;
       text-align: center;
     }
   </style>
@@ -164,7 +164,6 @@
   <div id="app">
     <div class="progress" id="progress"></div>
     <div class="header">
-      <h1 id="header-year">2020</h1>
       <nav class="stats" id="stats">
         <div class="item">
           <p class="heading">Total</p>
@@ -185,6 +184,14 @@
         <div class="item">
           <p class="heading">No. de edições</p>
           <p class="value" id="stats-issues">0</p>
+        </div>
+        <div class="item">
+          <p class="heading">Páginas por mês</p>
+          <p class="value" id="stats-pages-per-month">0</p>
+        </div>
+        <div class="item">
+          <p class="heading">Edições por mês</p>
+          <p class="value" id="stats-issues-per-month">0</p>
         </div>
       </nav>
     </div>
@@ -228,8 +235,55 @@
     }
 
     function render(rows) {
-      renderRows(rows);
       renderStats(rows);
+      renderRows(rows);
+    }
+
+    function renderStats(rows) {
+      document
+        .getElementById("stats-total")
+        .innerText = rows.length;
+
+      document
+        .getElementById("stats-paper")
+        .innerText = rows
+          .filter(row => row.format !== "Digital")
+          .length;
+
+      document
+        .getElementById("stats-digital")
+        .innerText = rows
+          .filter(row => row.format === "Digital")
+          .length;
+
+      const add = (x, y) => x + y;
+
+      const pages = rows
+          .map(row => row.pages)
+          .reduce(add, 0);
+
+      const issues = rows
+          .map(row => row.issues)
+          .reduce(add, 0);
+
+      document
+        .getElementById("stats-pages")
+        .innerText = pages;
+
+      document
+        .getElementById("stats-issues")
+        .innerText = issues;
+
+      const today = new Date();
+      const month = today.getMonth() + 1;
+
+      document
+        .getElementById("stats-pages-per-month")
+        .innerText = Math.round(pages / month);
+
+      document
+        .getElementById("stats-issues-per-month")
+        .innerText = Math.round(issues / month);
     }
 
     function renderRows(rows) {
@@ -262,38 +316,6 @@
 
         cards.insertBefore(card, cards.firstChild);
       }
-    }
-
-    function renderStats(rows) {
-      document
-        .getElementById("stats-total")
-        .innerText = rows.length;
-
-      document
-        .getElementById("stats-paper")
-        .innerText = rows
-          .filter(row => row.format !== "Digital")
-          .length;
-
-      document
-        .getElementById("stats-digital")
-        .innerText = rows
-          .filter(row => row.format === "Digital")
-          .length;
-
-      const add = (x, y) => x + y;
-
-      document
-        .getElementById("stats-pages")
-        .innerText = rows
-          .map(row => row.pages)
-          .reduce(add, 0);
-
-      document
-        .getElementById("stats-issues")
-        .innerText = rows
-          .map(row => row.issues)
-          .reduce(add, 0);
     }
 
     async function onClientLoad() {
