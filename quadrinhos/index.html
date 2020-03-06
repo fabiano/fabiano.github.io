@@ -206,6 +206,15 @@
     const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
     const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
 
+    function parseDate(input) {
+      const parts = input.split("/");
+      const year = parts[2];
+      const month = parts[1] - 1;
+      const day = parts[0];
+
+      return new Date(year, month, day);
+    }
+
     async function get(year) {
       const response = await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
@@ -223,7 +232,7 @@
 
         return {
           number: index + 1,
-          date,
+          date: parseDate(date),
           publisher,
           title,
           pages: parseInt(pages, 10),
@@ -299,7 +308,7 @@
               <div class="number">
                 <span>#${number}</span>
               </div>
-              <div class="date">${date}</div>
+              <div class="date">${date.toLocaleDateString()}</div>
           </div>
           <div class="card-body">
             <div class="title">
@@ -329,7 +338,10 @@
         discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
       });
 
-      render(transform(await get(2020)));
+      const today = new Date();
+      const year = today.getFullYear();
+
+      render(transform(await get(year)));
 
       document
         .getElementById("progress")
