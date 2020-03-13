@@ -112,29 +112,34 @@ function renderStats(rows) {
 function renderChart(rows) {
   console.time("rendering chart");
 
-  const grouped = rows.reduce((acc, row) => {
-    const month = row.date.toLocaleString("default", { month: "long" });
+  const data = rows.reduce((acc, row) => {
+    const month = row.date.toLocaleString("pt-BR", { month: "long" });
 
-    acc[month] = { count: 0, pages: 0, issues: 0, ...acc[month] };
-    acc[month].name = month;
-    acc[month].count += 1;
-    acc[month].pages += row.pages;
-    acc[month].issues += row.issues;
+    acc[month] = (acc[month] || 0) + 1;
 
     return acc;
   }, {});
 
-  const data = [];
+  const highest = Object
+    .values(data)
+    .reduce((acc, value) => value > acc ? value : acc, 0);
 
-  for (const key in grouped) {
-    if (grouped.hasOwnProperty(key)) {
-      const element = grouped[key];
+  const chart = document.getElementById("chart");
 
-      data.push(element);
-    }
+  for (const key in data) {
+    const value = data[key];
+    const dataSerie = document.createElement("div");
+
+    dataSerie.classList.add("data-serie");
+
+    dataSerie.innerHTML = `
+      <span class="label">${key}</span>
+      <span class="value">${value}</span>
+      <progress class="bar" value="${value}" max="${highest}"></progress>
+    `;
+
+    chart.appendChild(dataSerie);
   }
-
-  console.log(data);
 
   console.timeEnd("rendering chart");
 }

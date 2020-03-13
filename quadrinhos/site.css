@@ -24,7 +24,7 @@ a {
   animation-timing-function: ease;
   background-color: #00d1b2;
   display: block;
-  height: 1rem;
+  height: 10px;
   width: 0;
 }
 
@@ -88,41 +88,64 @@ a {
 }
 
 .chart {
-  display: none;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
 }
 
-.chart .bar {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
+.chart .data-serie {
   margin: 0 0 5px 0;
+  position: relative;
 }
 
-.chart .bar span {
-  margin-right: 5px;
-  text-align: right;
-  width: 92px;
+.chart .data-serie .label {
+  color: #fff;
+  font-size: 1.5rem;
+  height: 20px;
+  left: 15px;
+  line-height: 18px;
+  position: absolute;
 }
 
-.chart .bar progress {
+.chart .data-serie .label::before {
+  background-color: #fff;
+  border-color: transparent #00d1b2;
+  border-style: solid;
+  border-width: 10px 10px 10px 0;
+  content: "";
+  left: -15px;
+  position: absolute;
+}
+
+.chart .data-serie .value {
+  color: #fff;
+  font-size: 1.5rem;
+  height: 20px;
+  line-height: 20px;
+  position: absolute;
+  right: 5px;
+}
+
+.chart .data-serie .bar {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   border: none;
   display: block;
-  height: 2rem;
+  height: 20px;
   overflow: hidden;
   padding: 0;
   width: 100%;
 }
 
-.chart .bar progress::-webkit-progress-bar {
+.chart .data-serie .bar::-moz-progress-bar {
+  background-color: #00d1b2;
+}
+
+.chart .data-serie .bar::-webkit-progress-bar {
   background-color: #eee;
 }
 
-.chart .bar progress::-webkit-progress-value {
-  background-color: #3273dc;
+.chart .data-serie .bar::-webkit-progress-value {
+  background-color: #00d1b2;
 }
 
 .cards {
@@ -147,7 +170,7 @@ a {
 }
 
 .cards .card .number {
-  font-size: 0.60em;
+  font-size: 1rem;
   margin-bottom: 5px;
 }
 
@@ -159,7 +182,7 @@ a {
 }
 
 .cards .card .date {
-  font-size: 0.75em;
+  font-size: 1.2rem;
 }
 
 .cards .card .title {
@@ -169,19 +192,19 @@ a {
 }
 
 .cards .card .publisher {
-  font-size: 0.75em;
+  font-size: 1.2rem;
 }
 
 .cards .card .format {
-  font-size: 0.75em;
+  font-size: 1.2rem;
 }
 
 .cards .card .pages {
-  font-size: 0.75em;
+  font-size: 1.2rem;
 }
 
 .cards .card .issues {
-  font-size: 0.75em;
+  font-size: 1.2rem;
 }
 
 .footer {
