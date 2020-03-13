@@ -52,6 +52,7 @@ function render(rows) {
   console.time("rendering");
 
   renderStats(rows);
+  renderChart(rows);
   renderRows(rows);
 
   console.timeEnd("rendering");
@@ -106,6 +107,36 @@ function renderStats(rows) {
     .innerText = Math.round(issues / month);
 
     console.timeEnd("rendering stats");
+}
+
+function renderChart(rows) {
+  console.time("rendering chart");
+
+  const grouped = rows.reduce((acc, row) => {
+    const month = row.date.toLocaleString("default", { month: "long" });
+
+    acc[month] = { count: 0, pages: 0, issues: 0, ...acc[month] };
+    acc[month].name = month;
+    acc[month].count += 1;
+    acc[month].pages += row.pages;
+    acc[month].issues += row.issues;
+
+    return acc;
+  }, {});
+
+  const data = [];
+
+  for (const key in grouped) {
+    if (grouped.hasOwnProperty(key)) {
+      const element = grouped[key];
+
+      data.push(element);
+    }
+  }
+
+  console.log(data);
+
+  console.timeEnd("rendering chart");
 }
 
 function renderRows(rows) {

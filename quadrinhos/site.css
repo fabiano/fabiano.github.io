@@ -22,7 +22,6 @@ a {
   animation-iteration-count: infinite;
   animation-name: progress;
   animation-timing-function: ease;
-  appearance: none;
   background-color: #00d1b2;
   display: block;
   height: 1rem;
@@ -47,7 +46,6 @@ a {
   border-bottom: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .header h1 {
@@ -80,6 +78,51 @@ a {
   font-size: 3.5rem;
   font-weight: 500;
   margin: 0;
+}
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.chart {
+  display: none;
+  padding: 20px;
+}
+
+.chart .bar {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 5px 0;
+}
+
+.chart .bar span {
+  margin-right: 5px;
+  text-align: right;
+  width: 92px;
+}
+
+.chart .bar progress {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  display: block;
+  height: 2rem;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.chart .bar progress::-webkit-progress-bar {
+  background-color: #eee;
+}
+
+.chart .bar progress::-webkit-progress-value {
+  background-color: #3273dc;
 }
 
 .cards {
