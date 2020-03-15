@@ -46,6 +46,7 @@ a {
   border-bottom: 1px solid #eee;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
 .header h1 {
@@ -59,11 +60,14 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  height: 60px;
   justify-content: space-evenly;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .stats .item {
-  padding: 20px 40px;
+  margin: 0 10px;
   text-align: center;
 }
 
@@ -80,20 +84,13 @@ a {
   margin: 0;
 }
 
-.stats {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-}
-
-.chart {
-  padding: 0 20px 20px 20px;
-}
-
 .chart .data-serie {
   margin: 0 0 5px 0;
   position: relative;
+}
+
+.chart .data-serie:last-of-type {
+  margin: 0;
 }
 
 .chart .data-serie .label {
@@ -101,6 +98,7 @@ a {
   font-size: 1.5rem;
   height: 20px;
   left: 15px;
+  letter-spacing: -0.1rem;
   line-height: 18px;
   position: absolute;
 }
@@ -153,8 +151,7 @@ a {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 20px auto;
-  width: 95%;
+  padding: 10px;
 }
 
 .cards .card {
@@ -163,7 +160,7 @@ a {
   flex-direction: column;
   height: 170px;
   justify-content: space-between;
-  margin: 20px;
+  margin: 10px;
   padding: 10px;
   text-align: center;
   width: 190px;
@@ -208,6 +205,22 @@ a {
 }
 
 .footer {
-  margin: 20px 0;
+  margin: 0 0 20px 0;
   text-align: center;
+}
+
+@media only screen and (max-device-width: 767px) {
+  .stats .item:nth-child(n+4) {
+    display: none;
+  }
+
+  .cards .card {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-device-width: 1023px) {
+  .stats .item:nth-child(n+6) {
+    display: none;
+  }
 }
