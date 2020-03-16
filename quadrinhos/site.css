@@ -150,7 +150,6 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
   padding: 10px;
 }
 
@@ -209,7 +208,9 @@ a {
   text-align: center;
 }
 
-@media only screen and (max-device-width: 767px) {
+/* 1 column */
+
+@media only screen and (max-width: 503px) {
   .stats .item:nth-child(n+4) {
     display: none;
   }
@@ -219,8 +220,120 @@ a {
   }
 }
 
-@media only screen and (max-device-width: 1023px) {
+/* 2 columns */
+
+@media only screen and (min-width: 504px) and (max-width: 735px) {
+  .stats {
+    margin-left: auto;
+    margin-right: auto;
+    width: 444px;
+  }
+
+  .stats .item:nth-child(n+4) {
+    display: none;
+  }
+
+  .chart {
+    margin-left: auto;
+    margin-right: auto;
+    width: 444px;
+  }
+
+  .cards {
+    margin-left: auto;
+    margin-right: auto;
+    width: 464px;
+  }
+}
+
+/* 3 columns */
+
+@media only screen and (min-width: 736px) and (max-width: 967px) {
+  .stats {
+    margin-left: auto;
+    margin-right: auto;
+    width: 676px;
+  }
+
   .stats .item:nth-child(n+6) {
     display: none;
+  }
+
+  .chart {
+    margin-left: auto;
+    margin-right: auto;
+    width: 676px;
+  }
+
+  .cards {
+    margin-left: auto;
+    margin-right: auto;
+    width: 696px;
+  }
+}
+
+/* 4 columns */
+
+@media only screen and (min-width: 968px) and (max-width: 1199px) {
+  .stats {
+    margin-left: auto;
+    margin-right: auto;
+    width: 908px;
+  }
+
+  .chart {
+    margin-left: auto;
+    margin-right: auto;
+    width: 908px;
+  }
+
+  .cards {
+    margin-left: auto;
+    margin-right: auto;
+    width: 928px;
+  }
+}
+
+/* 5 columns */
+
+@media only screen and (min-width: 1200px) and (max-width: 1431px) {
+  .stats {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1140px;
+  }
+
+  .chart {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1140px;
+  }
+
+  .cards {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1160px;
+  }
+}
+
+/* 6 columns */
+
+@media only screen and (min-width: 1432px) {
+  .stats {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1372px;
+  }
+
+  .chart {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1372px;
+  }
+
+  .cards {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1392px;
   }
 }
