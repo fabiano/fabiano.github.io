@@ -17,10 +17,10 @@
   </style>
 </head>
 <body>
-  <h2>css-layout-hack</h2>
+  <h2>Toogle outlines</h2>
   <pre>
 javascript: (function() {
-  var styleTag = document.querySelector("#css-layout-hack");
+  var styleTag = document.querySelector("#toogle-outlines");
 
   if (styleTag) {
     document.head.removeChild(styleTag);
@@ -30,7 +30,7 @@ javascript: (function() {
 
   styleTag = document.createElement("style");
 
-  styleTag.id = "css-layout-hack";
+  styleTag.id = "toogle-outlines";
 
   styleTag.append(`
     html * {
