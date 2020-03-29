@@ -1,13 +1,47 @@
 const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
 const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
 
-function parseDate(input) {
-  const parts = input.split("/");
-  const year = parts[2];
-  const month = parts[1] - 1;
-  const day = parts[0];
+// const i18n = {
+//   "en-US": {
+//     "Total": "Total",
+//     "Em papel": "Paper",
+//     "Digital": "Digital",
+//     "No. de páginas": "Pages",
+//     "No. de edições": "Issues",
+//     "Páginas por mês": "Pages per month",
+//     "Edições por mês": "Issues per month",
+//   },
+// };
 
-  return new Date(year, month, day);
+// function t(strings, ...keys) {
+//   const language = i18n[navigator.language];
+
+//   return strings
+//     .map((value, index) => {
+//       let ret = language.hasOwnProperty(value)
+//         ? language[value]
+//         : value;
+
+//       if (index < keys.length) {
+//         ret += keys[index]
+//       }
+
+//       return ret;
+//     })
+//     .reduce((acc, value) => acc + value, "");
+// }
+
+function parseDate(input) {
+  if (input) {
+    const parts = input.split("/");
+    const year = parts[2];
+    const month = parts[1] - 1;
+    const day = parts[0];
+
+    return new Date(year, month, day);
+  }
+
+  return null;
 }
 
 async function get(year) {
@@ -51,8 +85,10 @@ function transform(rows) {
 function render(rows) {
   console.time("rendering");
 
-  renderStats(rows);
-  renderChart(rows);
+  const filtered = rows.filter(row => row.date);
+
+  renderStats(filtered);
+  renderChart(filtered);
   renderRows(rows);
 
   console.timeEnd("rendering");
@@ -154,12 +190,17 @@ function renderRows(rows) {
 
     card.classList.add("card");
 
+    if (date === null) {
+      card.classList.add("has-ribbon");
+    }
+
     card.innerHTML = `
+      <div class="card-ribbon">Lendo</div>
       <div class="card-header">
           <div class="number">
             <span>#${number}</span>
           </div>
-          <div class="date">${date.toLocaleDateString()}</div>
+          <div class="date">${date ? date.toLocaleDateString() : "..."}</div>
       </div>
       <div class="card-body">
         <div class="title">

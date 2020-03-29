@@ -165,6 +165,30 @@ a {
   width: 190px;
 }
 
+.cards .card.has-ribbon {
+  position: relative;
+  overflow: hidden;
+}
+
+.cards .card.has-ribbon .card-ribbon {
+  background-color: #00d1b2;
+  color: #fff;
+  display: block;
+  font-size: 1.5rem;
+  height: 20px;
+  left: -10px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 50px;
+  transform-origin: left;
+  transform: rotate(-45deg);
+  width: 100px;
+}
+
+.cards .card .card-ribbon {
+  display: none;
+}
+
 .cards .card .number {
   font-size: 1rem;
   margin-bottom: 5px;
