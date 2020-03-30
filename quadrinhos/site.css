@@ -175,8 +175,9 @@ a {
   color: #fff;
   display: block;
   font-size: 1.5rem;
-  height: 20px;
   left: -10px;
+  line-height: 1.5rem;
+  padding: 3px;
   position: absolute;
   text-transform: uppercase;
   top: 50px;
