@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "http-server",
+        ".",
+        "--port",
+        "3478"
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^$",
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting up http-server, serving .",
+          "endsPattern": "Hit CTRL-C to stop the server",
+        },
+      },
+    },
+  ],
+}

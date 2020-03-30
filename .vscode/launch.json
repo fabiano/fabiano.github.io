@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Edge against localhost",
+      "type": "edge",
+      "version": "dev",
+      "request": "launch",
+      "url": "http://localhost:3478",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start",
+    },
+  ],
+}
