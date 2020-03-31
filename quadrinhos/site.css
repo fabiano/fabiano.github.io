@@ -95,10 +95,10 @@ a {
 
 .chart .data-serie .label {
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   height: 20px;
   left: 15px;
-  letter-spacing: -0.1rem;
+  letter-spacing: 0.1rem;
   line-height: 20px;
   position: absolute;
   text-transform: uppercase;
@@ -118,7 +118,7 @@ a {
 
 .chart .data-serie .value {
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   height: 20px;
   line-height: 20px;
   position: absolute;
@@ -177,10 +177,11 @@ a {
   background-color: #00d1b2;
   color: #fff;
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  height: 20px;
   left: -10px;
-  line-height: 1.5rem;
-  padding: 3px;
+  letter-spacing: 0.1rem;
+  line-height: 20px;
   position: absolute;
   text-transform: uppercase;
   top: 50px;
