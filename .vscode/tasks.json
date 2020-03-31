@@ -8,8 +8,10 @@
       "args": [
         "http-server",
         ".",
-        "--port",
-        "3478"
+        "-p",
+        "3478",
+        "-c-1",
+        "-o",
       ],
       "isBackground": true,
       "problemMatcher": {
