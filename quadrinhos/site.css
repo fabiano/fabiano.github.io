@@ -109,7 +109,9 @@ a {
   border-color: transparent #00d1b2;
   border-style: solid;
   border-width: 10px 10px 10px 0;
+  box-sizing: border-box;
   content: "";
+  height: 20px;
   left: -15px;
   position: absolute;
 }
