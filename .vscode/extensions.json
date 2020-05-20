@@ -2,6 +2,5 @@
   "recommendations": [
     "EditorConfig.EditorConfig",
     "msjsdiag.debugger-for-edge",
-    "coenraads.bracket-pair-colorizer-2",
   ],
 }
