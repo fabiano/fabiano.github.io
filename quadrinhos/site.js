@@ -1,44 +1,11 @@
 const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
 const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
 
-// const i18n = {
-//   "en-US": {
-//     "Total": "Total",
-//     "Em papel": "Paper",
-//     "Digital": "Digital",
-//     "No. de páginas": "Pages",
-//     "No. de edições": "Issues",
-//     "Páginas por mês": "Pages per month",
-//     "Edições por mês": "Issues per month",
-//   },
-// };
-
-// function t(strings, ...keys) {
-//   const language = i18n[navigator.language];
-
-//   return strings
-//     .map((value, index) => {
-//       let ret = language.hasOwnProperty(value)
-//         ? language[value]
-//         : value;
-
-//       if (index < keys.length) {
-//         ret += keys[index]
-//       }
-
-//       return ret;
-//     })
-//     .reduce((acc, value) => acc + value, "");
-// }
-
 function parseDate(input) {
   if (input) {
-    const parts = input.split("/");
-    const year = parts[2];
-    const month = parts[1] - 1;
-    const day = parts[0];
+    const [day, month, year] = input.split("/");
 
-    return new Date(year, month, day);
+    return new Date(year, month - 1, day);
   }
 
   return null;
@@ -85,10 +52,10 @@ function transform(rows) {
 function render(rows) {
   console.time("rendering");
 
-  const filtered = rows.filter(row => row.date);
+  const read = rows.filter(row => row.date);
 
-  renderStats(filtered);
-  renderChart(filtered);
+  renderStats(read);
+  renderChart(read);
   renderRows(rows);
 
   console.timeEnd("rendering");
