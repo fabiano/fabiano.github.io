@@ -1,14 +1,29 @@
 const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
 const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
+const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 
-function parseDate(input) {
-  if (input) {
-    const [day, month, year] = input.split("/");
+gapi.load("client", onClientLoad);
 
-    return new Date(year, month - 1, day);
-  }
+async function onClientLoad() {
+  document
+    .getElementById("progress")
+    .classList
+    .remove("is-invisible");
 
-  return null;
+  await gapi.client.init({
+    apiKey: API_KEY,
+    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+  });
+
+  const today = new Date();
+  const year = today.getFullYear();
+
+  render(transform(await get(year)));
+
+  document
+    .getElementById("progress")
+    .classList
+    .add("is-invisible");
 }
 
 async function get(year) {
@@ -34,7 +49,7 @@ function transform(rows) {
 
     return {
       number: index + 1,
-      date: parseDate(date),
+      date,
       publisher,
       title,
       pages: parseInt(pages, 10),
@@ -62,61 +77,56 @@ function render(rows) {
 }
 
 function renderStats(rows) {
-  console.time("rendering stats");
-
-  document
-    .getElementById("stats-total")
-    .innerText = rows.length;
-
-  document
-    .getElementById("stats-paper")
-    .innerText = rows
-      .filter(row => row.format !== "Digital")
-      .length;
-
-  document
-    .getElementById("stats-digital")
-    .innerText = rows
-      .filter(row => row.format === "Digital")
-      .length;
-
-  const add = (x, y) => x + y;
-
-  const pages = rows
-      .map(row => row.pages)
-      .reduce(add, 0);
-
-  const issues = rows
-      .map(row => row.issues)
-      .reduce(add, 0);
-
-  document
-    .getElementById("stats-pages")
-    .innerText = pages;
-
-  document
-    .getElementById("stats-issues")
-    .innerText = issues;
-
   const today = new Date();
   const month = today.getMonth() + 1;
+  const add = (x, y) => x + y;
 
-  document
-    .getElementById("stats-pages-per-month")
-    .innerText = Math.round(pages / month);
+  console.time("rendering stats");
 
-  document
-    .getElementById("stats-issues-per-month")
-    .innerText = Math.round(issues / month);
+  const total = document.getElementById("stats-total");
 
-    console.timeEnd("rendering stats");
+  total.textContent = rows.length;
+
+  const paper = document.getElementById("stats-paper");
+
+  paper.textContent = rows
+    .filter(row => row.format !== "Digital")
+    .length;
+
+  const digital = document.getElementById("stats-digital");
+
+  digital.textContent = rows
+    .filter(row => row.format === "Digital")
+    .length;
+
+  const pages = document.getElementById("stats-pages");
+
+  pages.textContent = rows
+    .map(row => row.pages)
+    .reduce(add, 0);
+
+  const issues = document.getElementById("stats-issues");
+
+  issues.textContent = rows
+    .map(row => row.issues)
+    .reduce(add, 0);
+
+  const pagesPerMonth = document.getElementById("stats-pages-per-month");
+
+  pagesPerMonth.textContent = Math.round(pages / month);
+
+  const issuesPerMonth = document.getElementById("stats-issues-per-month");
+
+  issuesPerMonth.textContent = Math.round(issues / month);
+
+  console.timeEnd("rendering stats");
 }
 
 function renderChart(rows) {
   console.time("rendering chart");
 
   const data = rows.reduce((acc, row) => {
-    const month = row.date.toLocaleString("pt-BR", { month: "long" });
+    const month = MONTHS[parseInt(row.date.slice(3, 5), 10) - 1];
 
     acc[month] = (acc[month] || 0) + 1;
 
@@ -127,22 +137,40 @@ function renderChart(rows) {
     .values(data)
     .reduce((acc, value) => value > acc ? value : acc, 0);
 
-  const chart = document.getElementById("chart");
+  const fragment = document.createDocumentFragment();
 
   for (const key in data) {
     const value = data[key];
+    const dataSerieLabel = document.createElement("span");
+
+    dataSerieLabel.className = "label";
+    dataSerieLabel.textContent = key;
+
+    const dataSerieValue = document.createElement("span");
+
+    dataSerieValue.className = "value";
+    dataSerieValue.textContent = value;
+
+    const dataSerieBar = document.createElement("progress");
+
+    dataSerieBar.className = "bar";
+    dataSerieBar.value = value;
+    dataSerieBar.max = highest;
+
     const dataSerie = document.createElement("div");
 
-    dataSerie.classList.add("data-serie");
+    dataSerie.className = "data-serie";
 
-    dataSerie.innerHTML = `
-      <span class="label">${key}</span>
-      <span class="value">${value}</span>
-      <progress class="bar" value="${value}" max="${highest}"></progress>
-    `;
+    dataSerie.appendChild(dataSerieLabel);
+    dataSerie.appendChild(dataSerieValue);
+    dataSerie.appendChild(dataSerieBar);
 
-    chart.appendChild(dataSerie);
+    fragment.appendChild(dataSerie);
   }
+
+  const chart = document.getElementById("chart");
+
+  chart.appendChild(fragment);
 
   console.timeEnd("rendering chart");
 }
@@ -150,64 +178,86 @@ function renderChart(rows) {
 function renderRows(rows) {
   console.time("rendering rows");
 
-  const cards = document.getElementById("cards");
+  const fragment = document.createDocumentFragment();
 
   for (const { number, date, publisher, title, pages, issues, format, href } of rows) {
+    const cardHeaderNumber = document.createElement("div");
+
+    cardHeaderNumber.className = "number";
+    cardHeaderNumber.textContent = `#${number}`;
+
+    const cardHeaderDate = document.createElement("div");
+
+    cardHeaderDate.className = "date";
+    cardHeaderDate.textContent = date ? date : "...";
+
+    const cardHeader = document.createElement("div");
+
+    cardHeader.appendChild(cardHeaderNumber);
+    cardHeader.appendChild(cardHeaderDate);
+
+    const cardBodyTitleAnchor = document.createElement("a");
+
+    cardBodyTitleAnchor.href = href;
+    cardBodyTitleAnchor.textContent = title;
+
+    const cardBodyTitle = document.createElement("div");
+
+    cardBodyTitle.className = "title";
+
+    cardBodyTitle.appendChild(cardBodyTitleAnchor);
+
+    const cardBodyPublisherAndFormat = document.createElement("div");
+
+    cardBodyPublisherAndFormat.className = "publisher-and-format";
+    cardBodyPublisherAndFormat.textContent = `${publisher} / ${format}`;
+
+    const cardBody = document.createElement("div");
+
+    cardBody.appendChild(cardBodyTitle);
+    cardBody.appendChild(cardBodyPublisherAndFormat);
+
+    const cardFooterPagesAndIssues = document.createElement("div");
+
+    cardFooterPagesAndIssues.className = "pages-and-issues";
+    cardFooterPagesAndIssues.textContent = `${pages} páginas e ${issues} edições`;
+
+    const cardFooter = document.createElement("div");
+
+    cardFooter.appendChild(cardFooterPagesAndIssues);
+
     const card = document.createElement("div");
 
-    card.classList.add("card");
+    card.className = "card";
 
-    if (date === null) {
+    if (date === "") {
       card.classList.add("has-ribbon");
+
+      const cardRibbon = document.createElement("div");
+
+      cardRibbon.className = "ribbon";
+      cardRibbon.textContent = "Lendo";
+
+      card.appendChild(cardRibbon);
     }
 
-    card.innerHTML = `
-      <div class="card-ribbon">Lendo</div>
-      <div class="card-header">
-          <div class="number">
-            <span>#${number}</span>
-          </div>
-          <div class="date">${date ? date.toLocaleDateString() : "..."}</div>
-      </div>
-      <div class="card-body">
-        <div class="title">
-          <a href="${href}">${title}</a>
-        </div>
-        <div class="publisher format">
-          ${publisher} / ${format}
-        </div>
-      </div>
-      <div class="card-footer">
-          <div class="pages issues">${pages} páginas e ${issues} edições</div>
-      </div>
-    `;
+    card.appendChild(cardHeader);
+    card.appendChild(cardBody);
+    card.appendChild(cardFooter);
 
-    cards.insertBefore(card, cards.firstChild);
+    fragment.insertBefore(card, fragment.firstChild);
   }
+
+  const cards = document.createElement("cards");
+
+  cards.id = "cards";
+  cards.className = "cards";
+
+  cards.appendChild(fragment);
+
+  document
+    .getElementById("cards")
+    .replaceWith(cards);
 
   console.timeEnd("rendering rows");
 }
-
-async function onClientLoad() {
-  document
-    .getElementById("progress")
-    .classList
-    .remove("is-invisible");
-
-  await gapi.client.init({
-    apiKey: API_KEY,
-    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-  });
-
-  const today = new Date();
-  const year = today.getFullYear();
-
-  render(transform(await get(year)));
-
-  document
-    .getElementById("progress")
-    .classList
-    .add("is-invisible");
-}
-
-gapi.load("client", onClientLoad);

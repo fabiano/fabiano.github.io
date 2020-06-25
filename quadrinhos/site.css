@@ -173,7 +173,7 @@ a {
   overflow: hidden;
 }
 
-.cards .card.has-ribbon .card-ribbon {
+.cards .card.has-ribbon .ribbon {
   background-color: #00d1b2;
   color: #fff;
   display: block;
@@ -190,20 +190,13 @@ a {
   width: 100px;
 }
 
-.cards .card .card-ribbon {
+.cards .card .ribbon {
   display: none;
 }
 
 .cards .card .number {
   font-size: 1rem;
   margin-bottom: 5px;
-}
-
-.cards .card .number span {
-  align-items: center;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
 }
 
 .cards .card .date {
@@ -216,19 +209,11 @@ a {
   word-break: break-word;
 }
 
-.cards .card .publisher {
+.cards .card .publisher-and-format {
   font-size: 1.2rem;
 }
 
-.cards .card .format {
-  font-size: 1.2rem;
-}
-
-.cards .card .pages {
-  font-size: 1.2rem;
-}
-
-.cards .card .issues {
+.cards .card .pages-and-issues {
   font-size: 1.2rem;
 }
 
