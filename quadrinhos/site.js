@@ -101,23 +101,27 @@ function renderStats(rows) {
 
   const pages = document.getElementById("stats-pages");
 
-  pages.textContent = rows
+  const totalOfPages = rows
     .map(row => row.pages)
     .reduce(add, 0);
 
+  pages.textContent = totalOfPages;
+
   const issues = document.getElementById("stats-issues");
 
-  issues.textContent = rows
+  const totalOfIssues = rows
     .map(row => row.issues)
     .reduce(add, 0);
 
+  issues.textContent = totalOfIssues;
+
   const pagesPerMonth = document.getElementById("stats-pages-per-month");
 
-  pagesPerMonth.textContent = Math.round(pages / month);
+  pagesPerMonth.textContent = Math.round(totalOfPages / month);
 
   const issuesPerMonth = document.getElementById("stats-issues-per-month");
 
-  issuesPerMonth.textContent = Math.round(issues / month);
+  issuesPerMonth.textContent = Math.round(totalOfIssues / month);
 
   console.timeEnd("rendering stats");
 }
