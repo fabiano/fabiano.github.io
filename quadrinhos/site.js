@@ -5,10 +5,7 @@ const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Jul
 gapi.load("client", onClientLoad);
 
 async function onClientLoad() {
-  document
-    .getElementById("progress")
-    .classList
-    .remove("is-invisible");
+  document.body.classList.add("is-loading");
 
   await gapi.client.init({
     apiKey: API_KEY,
@@ -20,10 +17,7 @@ async function onClientLoad() {
 
   render(transform(await get(year)));
 
-  document
-    .getElementById("progress")
-    .classList
-    .add("is-invisible");
+  document.body.classList.remove("is-loading");
 }
 
 async function get(year) {

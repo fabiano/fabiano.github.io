@@ -11,6 +11,10 @@ body {
   font-size: 1.6rem;
 }
 
+body.is-loading {
+  overflow: hidden;
+}
+
 a {
   color: #3273dc;
   text-decoration: none;
@@ -23,8 +27,8 @@ a {
   animation-name: progress;
   animation-timing-function: ease;
   background-color: #00d1b2;
-  display: block;
-  height: 10px;
+  display: none;
+  height: 5px;
   width: 0;
 }
 
@@ -38,8 +42,8 @@ a {
   }
 }
 
-.progress.is-invisible {
-  display: none;
+body.is-loading .progress {
+  display: block;
 }
 
 .header {
