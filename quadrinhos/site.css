@@ -5,14 +5,14 @@ html {
   font-size: 62.5%;
 }
 
+html.debug * {
+  box-shadow: 0 0 0 1px red;
+}
+
 body {
   color: #383838;
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.6rem;
-}
-
-body.is-loading {
-  overflow: hidden;
 }
 
 a {
@@ -46,11 +46,13 @@ body.is-loading .progress {
   display: block;
 }
 
+.container {
+  margin: auto;
+  max-width: 1440px;
+}
+
 .header {
-  border-bottom: 1px solid #eee;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  margin: 0 20px;
 }
 
 .header h1 {
@@ -66,13 +68,18 @@ body.is-loading .progress {
   flex-wrap: wrap;
   height: 60px;
   justify-content: space-evenly;
-  margin-bottom: 20px;
+  margin-top: 20px;
   overflow: hidden;
+  width: 100%;
 }
 
 .stats .item {
   margin: 0 10px;
   text-align: center;
+}
+
+.stats .item:nth-child(n+4) {
+  display: none;
 }
 
 .stats .item .heading {
@@ -88,8 +95,13 @@ body.is-loading .progress {
   margin: 0;
 }
 
+.chart {
+  margin-top: 20px;
+  width: 100%;
+}
+
 .chart .data-serie {
-  margin: 0 0 5px 0;
+  margin-bottom: 5px;
   position: relative;
 }
 
@@ -136,7 +148,6 @@ body.is-loading .progress {
   border: none;
   display: block;
   height: 20px;
-  overflow: hidden;
   padding: 0;
   width: 100%;
 }
@@ -153,11 +164,23 @@ body.is-loading .progress {
   background-color: #00d1b2;
 }
 
+.separator {
+  background-color: #eee;
+  border: 0;
+  height: 1px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.body {
+  margin: 0 20px;
+}
+
 .cards {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 10px;
+  margin: -10px;
 }
 
 .cards .card {
@@ -169,7 +192,7 @@ body.is-loading .progress {
   margin: 10px;
   padding: 10px;
   text-align: center;
-  width: 190px;
+  width: 100%;
 }
 
 .cards .card.has-ribbon {
@@ -222,136 +245,44 @@ body.is-loading .progress {
 }
 
 .footer {
-  margin: 0 0 20px 0;
+  margin: 20px 0;
   text-align: center;
 }
 
-/* 1 column */
+/* media queries */
 
-@media only screen and (max-width: 503px) {
+@media only screen and (min-width: 768px) {
   .stats .item:nth-child(n+4) {
-    display: none;
-  }
-
-  .cards .card {
-    width: 100%;
-  }
-}
-
-/* 2 columns */
-
-@media only screen and (min-width: 504px) and (max-width: 735px) {
-  .stats {
-    margin-left: auto;
-    margin-right: auto;
-    width: 444px;
-  }
-
-  .stats .item:nth-child(n+4) {
-    display: none;
-  }
-
-  .chart {
-    margin-left: auto;
-    margin-right: auto;
-    width: 444px;
-  }
-
-  .cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 464px;
-  }
-}
-
-/* 3 columns */
-
-@media only screen and (min-width: 736px) and (max-width: 967px) {
-  .stats {
-    margin-left: auto;
-    margin-right: auto;
-    width: 676px;
+    display: block;
   }
 
   .stats .item:nth-child(n+6) {
     display: none;
   }
 
-  .chart {
-    margin-left: auto;
-    margin-right: auto;
-    width: 676px;
-  }
-
-  .cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 696px;
+  .cards .card {
+    width: calc(50% - 42px);
   }
 }
 
-/* 4 columns */
-
-@media only screen and (min-width: 968px) and (max-width: 1199px) {
-  .stats {
-    margin-left: auto;
-    margin-right: auto;
-    width: 908px;
-  }
-
-  .chart {
-    margin-left: auto;
-    margin-right: auto;
-    width: 908px;
-  }
-
-  .cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 928px;
+@media only screen and (min-width: 1024px) {
+  .cards .card {
+    width: calc(33.33333333333% - 42px);
   }
 }
 
-/* 5 columns */
-
-@media only screen and (min-width: 1200px) and (max-width: 1431px) {
-  .stats {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1140px;
+@media only screen and (min-width: 1366px) {
+  .stats .item:nth-child(n+6) {
+    display: block;
   }
 
-  .chart {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1140px;
-  }
-
-  .cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1160px;
+  .cards .card {
+    width: calc(25% - 42px);
   }
 }
 
-/* 6 columns */
-
-@media only screen and (min-width: 1432px) {
-  .stats {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1372px;
-  }
-
-  .chart {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1372px;
-  }
-
-  .cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1392px;
+@media only screen and (min-width: 1440px) {
+  .cards .card {
+    width: calc(20% - 42px);
   }
 }
