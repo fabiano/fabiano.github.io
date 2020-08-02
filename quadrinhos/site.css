@@ -132,6 +132,10 @@ body.is-loading .progress {
   position: absolute;
 }
 
+.chart .data-serie.is-zero .label::before {
+  border-color: transparent #eee;
+}
+
 .chart .data-serie .value {
   color: #fff;
   font-size: 1.2rem;

@@ -21,20 +21,20 @@ async function onClientLoad() {
 }
 
 async function get(year) {
-  console.time("getting");
+  console.time("get");
 
   const response = await gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
     range: `${year}!A2:G`,
   });
 
-  console.timeEnd("getting");
+  console.timeEnd("get");
 
   return response.result.values;
 }
 
 function transform(rows) {
-  console.time("transforming");
+  console.time("transform");
 
   const tmp = rows.map((row, index) => {
     const [
@@ -53,21 +53,20 @@ function transform(rows) {
     };
   });
 
-  console.timeEnd("transforming");
+  console.timeEnd("transform");
 
   return tmp;
 }
 
 function render(rows) {
-  console.time("rendering");
+  console.time("render");
 
   const read = rows.filter(row => row.date);
 
   renderStats(read);
-  renderChart(read);
   renderRows(rows);
 
-  console.timeEnd("rendering");
+  console.timeEnd("render");
 }
 
 function renderStats(rows) {
@@ -75,106 +74,62 @@ function renderStats(rows) {
   const month = today.getMonth() + 1;
   const add = (x, y) => x + y;
 
-  console.time("rendering stats");
+  console.time("render stats");
 
-  const total = document.getElementById("stats-total");
+  const statsTotal = document.getElementById("stats-total");
 
-  total.textContent = rows.length;
+  statsTotal.textContent = rows.length;
+  statsTotal.addEventListener("click", () => renderChart(rows, () => 1));
 
-  const paper = document.getElementById("stats-paper");
+  const statsPaper = document.getElementById("stats-paper");
 
-  paper.textContent = rows
+  statsPaper.textContent = rows
     .filter(row => row.format !== "Digital")
     .length;
 
-  const digital = document.getElementById("stats-digital");
+  statsPaper.addEventListener("click", () => renderChart(rows, row => row.format !== "Digital" ? 1 : 0));
 
-  digital.textContent = rows
+  const statsDigital = document.getElementById("stats-digital");
+
+  statsDigital.textContent = rows
     .filter(row => row.format === "Digital")
     .length;
 
-  const pages = document.getElementById("stats-pages");
+  statsDigital.addEventListener("click", () => renderChart(rows, row => row.format === "Digital" ? 1 : 0));
+
+  const statsPages = document.getElementById("stats-pages");
 
   const totalOfPages = rows
     .map(row => row.pages)
     .reduce(add, 0);
 
-  pages.textContent = totalOfPages;
+  statsPages.textContent = totalOfPages;
 
-  const issues = document.getElementById("stats-issues");
+  statsPages.addEventListener("click", () => renderChart(rows, row => row.pages));
+
+  const statsIssues = document.getElementById("stats-issues");
 
   const totalOfIssues = rows
     .map(row => row.issues)
     .reduce(add, 0);
 
-  issues.textContent = totalOfIssues;
+  statsIssues.textContent = totalOfIssues;
 
-  const pagesPerMonth = document.getElementById("stats-pages-per-month");
+  statsIssues.addEventListener("click", () => renderChart(rows, row => row.issues));
 
-  pagesPerMonth.textContent = Math.round(totalOfPages / month);
+  const statsPagesPerMonth = document.getElementById("stats-pages-per-month");
 
-  const issuesPerMonth = document.getElementById("stats-issues-per-month");
+  statsPagesPerMonth.textContent = Math.round(totalOfPages / month);
 
-  issuesPerMonth.textContent = Math.round(totalOfIssues / month);
+  const statsIssuesPerMonth = document.getElementById("stats-issues-per-month");
 
-  console.timeEnd("rendering stats");
-}
+  statsIssuesPerMonth.textContent = Math.round(totalOfIssues / month);
 
-function renderChart(rows) {
-  console.time("rendering chart");
-
-  const data = rows.reduce((acc, row) => {
-    const month = MONTHS[parseInt(row.date.slice(3, 5), 10) - 1];
-
-    acc[month] = (acc[month] || 0) + 1;
-
-    return acc;
-  }, {});
-
-  const highest = Object
-    .values(data)
-    .reduce((acc, value) => value > acc ? value : acc, 0);
-
-  const fragment = document.createDocumentFragment();
-
-  for (const key in data) {
-    const value = data[key];
-    const dataSerieLabel = document.createElement("span");
-
-    dataSerieLabel.className = "label";
-    dataSerieLabel.textContent = key;
-
-    const dataSerieValue = document.createElement("span");
-
-    dataSerieValue.className = "value";
-    dataSerieValue.textContent = value;
-
-    const dataSerieBar = document.createElement("progress");
-
-    dataSerieBar.className = "bar";
-    dataSerieBar.value = value;
-    dataSerieBar.max = highest;
-
-    const dataSerie = document.createElement("div");
-
-    dataSerie.className = "data-serie";
-
-    dataSerie.appendChild(dataSerieLabel);
-    dataSerie.appendChild(dataSerieValue);
-    dataSerie.appendChild(dataSerieBar);
-
-    fragment.appendChild(dataSerie);
-  }
-
-  const chart = document.getElementById("chart");
-
-  chart.appendChild(fragment);
-
-  console.timeEnd("rendering chart");
+  console.timeEnd("render stats");
 }
 
 function renderRows(rows) {
-  console.time("rendering rows");
+  console.time("render rows");
 
   const fragment = document.createDocumentFragment();
 
@@ -246,7 +201,7 @@ function renderRows(rows) {
     fragment.insertBefore(card, fragment.firstChild);
   }
 
-  const cards = document.createElement("cards");
+  const cards = document.createElement("div");
 
   cards.id = "cards";
   cards.className = "cards";
@@ -257,5 +212,71 @@ function renderRows(rows) {
     .getElementById("cards")
     .replaceWith(cards);
 
-  console.timeEnd("rendering rows");
+  console.timeEnd("render rows");
+}
+
+function renderChart(rows, reducer) {
+  console.time("render chart");
+
+  const data = rows
+    .filter(row => row.date)
+    .reduce((acc, row) => {
+      const month = MONTHS[parseInt(row.date.slice(3, 5), 10) - 1];
+
+      acc[month] = (acc[month] || 0) + reducer(row);
+
+      return acc;
+    }, {});
+
+  const highest = Object
+    .values(data)
+    .reduce((acc, value) => value > acc ? value : acc, 0);
+
+  const fragment = document.createDocumentFragment();
+
+  for (const key in data) {
+    const value = data[key];
+    const dataSerieLabel = document.createElement("span");
+
+    dataSerieLabel.className = "label";
+    dataSerieLabel.textContent = key;
+
+    const dataSerieValue = document.createElement("span");
+
+    dataSerieValue.className = "value";
+    dataSerieValue.textContent = value;
+
+    const dataSerieBar = document.createElement("progress");
+
+    dataSerieBar.className = "bar";
+    dataSerieBar.value = value;
+    dataSerieBar.max = highest;
+
+    const dataSerie = document.createElement("div");
+
+    dataSerie.className = "data-serie";
+
+    if (value === 0) {
+      dataSerie.classList.add("is-zero")
+    }
+
+    dataSerie.appendChild(dataSerieLabel);
+    dataSerie.appendChild(dataSerieValue);
+    dataSerie.appendChild(dataSerieBar);
+
+    fragment.appendChild(dataSerie);
+  }
+
+  const chart = document.createElement("div");
+
+  chart.id = "chart";
+  chart.className = "chart";
+
+  chart.appendChild(fragment);
+
+  document
+    .getElementById("chart")
+    .replaceWith(chart);
+
+  console.timeEnd("render chart");
 }
