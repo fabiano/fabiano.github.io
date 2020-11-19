@@ -173,7 +173,10 @@ function renderRows(rows) {
     const cardFooterPagesAndIssues = document.createElement("div");
 
     cardFooterPagesAndIssues.className = "pages-and-issues";
-    cardFooterPagesAndIssues.textContent = `${pages} páginas e ${issues} edições`;
+
+    cardFooterPagesAndIssues.textContent = issues > 1
+      ? `${pages} páginas e ${issues} edições`
+      : `${pages} páginas e ${issues} edição`;
 
     const cardFooter = document.createElement("div");
 
