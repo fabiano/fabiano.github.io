@@ -78,6 +78,10 @@ body.is-loading .progress {
   text-align: center;
 }
 
+.stats .item.clickable {
+  cursor: pointer;
+}
+
 .stats .item:nth-child(n+4) {
   display: none;
 }
