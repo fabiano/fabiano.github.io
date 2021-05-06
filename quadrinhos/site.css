@@ -225,6 +225,10 @@ body.is-loading .progress {
   width: 100px;
 }
 
+.cards .card.has-ribbon .ribbon.is-reading {
+  background-color: #00d1b2;
+}
+
 .cards .card .ribbon {
   display: none;
 }

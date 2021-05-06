@@ -188,6 +188,7 @@ function renderRows(rows) {
 
     if (date === "") {
       card.classList.add("has-ribbon");
+      card.classList.add("is-reading");
 
       const cardRibbon = document.createElement("div");
 
