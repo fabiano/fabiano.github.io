@@ -1,24 +1,66 @@
-/* https://github.com/vladocar/CSS-Mini-Reset */
+/* variables */
+
+:root {
+  --text-color: #383838;
+  --link-color: #3273dc;
+  --primary-color: #00d1b2;
+}
+
+/* css reset from https://github.com/vladocar/CSS-Mini-Reset */
+
 html,body,div,form,fieldset,legend,label{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}th,td{text-align:left;vertical-align:top;}h1,h2,h3,h4,h5,h6,th,td,caption{font-weight:normal;}img{border:0;}
+
+/* structure */
 
 html {
   font-size: 62.5%;
 }
 
-html.debug * {
-  box-shadow: 0 0 0 1px red;
-}
-
 body {
-  color: #383838;
+  color: var(--text-color);
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.6rem;
 }
 
 a {
-  color: #3273dc;
+  color: var(--link-color);
   text-decoration: none;
 }
+
+.container {
+  margin: auto;
+  max-width: 1440px;
+}
+
+.header {
+  margin: 0 20px;
+}
+
+.header h1 {
+  font-size: 8.5rem;
+  font-weight: 400;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.separator {
+  background-color: #eee;
+  border: 0;
+  height: 1px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.body {
+  margin: 0 20px;
+}
+
+.footer {
+  margin: 20px 0;
+  text-align: center;
+}
+
+/* progress */
 
 .progress {
   animation-direction: alternate;
@@ -26,7 +68,7 @@ a {
   animation-iteration-count: infinite;
   animation-name: progress;
   animation-timing-function: ease;
-  background-color: #00d1b2;
+  background-color: var(--primary-color);
   display: none;
   height: 5px;
   width: 0;
@@ -46,21 +88,7 @@ body.is-loading .progress {
   display: block;
 }
 
-.container {
-  margin: auto;
-  max-width: 1440px;
-}
-
-.header {
-  margin: 0 20px;
-}
-
-.header h1 {
-  font-size: 8.5rem;
-  font-weight: 400;
-  margin: 20px 0;
-  text-align: center;
-}
+/* stats */
 
 .stats {
   display: flex;
@@ -99,6 +127,24 @@ body.is-loading .progress {
   margin: 0;
 }
 
+@media only screen and (min-width: 768px) {
+  .stats .item:nth-child(n+4) {
+    display: block;
+  }
+
+  .stats .item:nth-child(n+6) {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 1366px) {
+  .stats .item:nth-child(n+6) {
+    display: block;
+  }
+}
+
+/* chart */
+
 .chart {
   margin-top: 20px;
   width: 100%;
@@ -126,7 +172,7 @@ body.is-loading .progress {
 
 .chart .data-serie .label::before {
   background-color: #fff;
-  border-color: transparent #00d1b2;
+  border-color: transparent var(--primary-color);
   border-style: solid;
   border-width: 10px 10px 10px 0;
   box-sizing: border-box;
@@ -161,7 +207,7 @@ body.is-loading .progress {
 }
 
 .chart .data-serie .bar::-moz-progress-bar {
-  background-color: #00d1b2;
+  background-color: var(--primary-color);
 }
 
 .chart .data-serie .bar::-webkit-progress-bar {
@@ -169,20 +215,10 @@ body.is-loading .progress {
 }
 
 .chart .data-serie .bar::-webkit-progress-value {
-  background-color: #00d1b2;
+  background-color: var(--primary-color);
 }
 
-.separator {
-  background-color: #eee;
-  border: 0;
-  height: 1px;
-  margin: 20px 0;
-  width: 100%;
-}
-
-.body {
-  margin: 0 20px;
-}
+/* cards */
 
 .cards {
   display: flex;
@@ -209,7 +245,7 @@ body.is-loading .progress {
 }
 
 .cards .card.has-ribbon .ribbon {
-  background-color: #00d1b2;
+  background-color: var(--primary-color);
   color: #fff;
   display: block;
   font-size: 1.2rem;
@@ -226,7 +262,7 @@ body.is-loading .progress {
 }
 
 .cards .card.has-ribbon .ribbon.is-reading {
-  background-color: #00d1b2;
+  background-color: var(--primary-color);
 }
 
 .cards .card .ribbon {
@@ -256,22 +292,7 @@ body.is-loading .progress {
   font-size: 1.2rem;
 }
 
-.footer {
-  margin: 20px 0;
-  text-align: center;
-}
-
-/* media queries */
-
 @media only screen and (min-width: 768px) {
-  .stats .item:nth-child(n+4) {
-    display: block;
-  }
-
-  .stats .item:nth-child(n+6) {
-    display: none;
-  }
-
   .cards .card {
     width: calc(50% - 42px);
   }
@@ -284,10 +305,6 @@ body.is-loading .progress {
 }
 
 @media only screen and (min-width: 1366px) {
-  .stats .item:nth-child(n+6) {
-    display: block;
-  }
-
   .cards .card {
     width: calc(25% - 42px);
   }
