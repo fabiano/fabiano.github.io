@@ -60,6 +60,10 @@ a {
   text-align: center;
 }
 
+.footer .history {
+  margin-bottom: 10px;
+}
+
 /* progress */
 
 .progress {

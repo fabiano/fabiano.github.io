@@ -5,15 +5,24 @@ const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Jul
 gapi.load("client", onClientLoad);
 
 async function onClientLoad() {
+  const today = new Date();
+
+  let year = today.getFullYear();
+
+  if (window.location.pathname) {
+    const yearFromURL = parseInt(window.location.pathname.substring(1), 10);
+
+    if (yearFromURL) {
+      year = yearFromURL;
+    }
+  }
+
   document.body.classList.add("is-loading");
 
   await gapi.client.init({
     apiKey: API_KEY,
     discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
   });
-
-  const today = new Date();
-  const year = today.getFullYear();
 
   render(transform(await get(year)));
 
