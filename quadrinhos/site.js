@@ -18,6 +18,9 @@ async function init() {
     }
   }
 
+  // Scroll to the top of the page
+  window.scrollTo(0, 0);
+
   // Get and render the data from the sheet
   document.body.classList.add("is-loading");
 
@@ -29,9 +32,6 @@ async function init() {
   render(transform(await get(year)));
 
   document.body.classList.remove("is-loading");
-
-  // Scroll to the top of the page
-  window.scrollTo(0, 0);
 }
 
 async function get(year) {
@@ -78,6 +78,7 @@ function render(rows) {
   const read = rows.filter(row => row.date);
 
   renderStats(read);
+  renderEmptyChart();
   renderRows(rows);
 
   console.timeEnd("render");
@@ -297,4 +298,15 @@ function renderChart(rows, reducer) {
     .replaceWith(chart);
 
   console.timeEnd("render chart");
+}
+
+function renderEmptyChart() {
+  const emptyChart = document.createElement("div");
+
+  emptyChart.id = "chart";
+  emptyChart.className = "chart";
+
+  document
+    .getElementById("chart")
+    .replaceWith(emptyChart);
 }
