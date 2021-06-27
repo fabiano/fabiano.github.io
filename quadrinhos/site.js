@@ -2,21 +2,23 @@ const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
 const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
 const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 
-gapi.load("client", onClientLoad);
+gapi.load("client", init); window.onpopstate = init;
 
-async function onClientLoad() {
+async function init() {
   const today = new Date();
 
   let year = today.getFullYear();
 
-  if (window.location.pathname) {
-    const yearFromURL = parseInt(window.location.pathname.substring(1), 10);
+  // Try to get the year from the URL
+  if (window.location.hash) {
+    const yearFromURL = parseInt(window.location.hash.substring(1), 10);
 
     if (yearFromURL) {
       year = yearFromURL;
     }
   }
 
+  // Get and render the data from the sheet
   document.body.classList.add("is-loading");
 
   await gapi.client.init({
@@ -27,6 +29,9 @@ async function onClientLoad() {
   render(transform(await get(year)));
 
   document.body.classList.remove("is-loading");
+
+  // Scroll to the top of the page
+  window.scrollTo(0, 0);
 }
 
 async function get(year) {
