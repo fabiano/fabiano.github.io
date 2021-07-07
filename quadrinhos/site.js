@@ -1,12 +1,8 @@
-const API_KEY = "AIzaSyCI6ZNr9J7ebFAo2sbD4tJi0G8JNr34Gyc";
-const SPREADSHEET_ID = "10rvpYl85_2Bh8mtt8Wbg7jDKvZgmOxYOR4EOiduHd0I";
-const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-gapi.load("client", init); window.onpopstate = init;
+(async function() {
 
-async function init() {
   const today = new Date();
-
   let year = today.getFullYear();
 
   // Try to get the year from the URL
@@ -24,44 +20,38 @@ async function init() {
   // Get and render the data from the sheet
   document.body.classList.add("is-loading");
 
-  await gapi.client.init({
-    apiKey: API_KEY,
-    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-  });
-
   render(transform(await get(year)));
 
   document.body.classList.remove("is-loading");
-}
+
+}());
 
 async function get(year) {
   console.time("get");
 
-  const response = await gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: `${year}!A2:G`,
-  });
+  const response = await fetch("https://quadrinhos.herokuapp.com/" + year);
+  const json = await response.json();
 
   console.timeEnd("get");
 
-  return response.result.values;
+  return json;
 }
 
 function transform(rows) {
   console.time("transform");
 
   const tmp = rows.map((row, index) => {
-    const [
+    const {
       date, publisher, title, pages, issues, format, href = "#"
-    ] = row;
+     } = row;
 
     return {
       number: index + 1,
-      date,
+      date: date ? new Date(date) : null,
       publisher,
       title,
-      pages: parseInt(pages, 10),
-      issues: parseInt(issues, 10),
+      pages: pages,
+      issues: issues,
       format,
       href,
     };
@@ -157,7 +147,10 @@ function renderRows(rows) {
     const cardHeaderDate = document.createElement("div");
 
     cardHeaderDate.className = "date";
-    cardHeaderDate.textContent = date ? date : "...";
+
+    cardHeaderDate.textContent = date
+      ? date.toLocaleDateString("pt-BR", { year: "numeric", month: "numeric", day: "numeric", timeZone: "UTC" })
+      : "...";
 
     const cardHeader = document.createElement("div");
 
@@ -240,7 +233,7 @@ function renderChart(rows, reducer) {
   const data = rows
     .filter(row => row.date)
     .reduce((acc, row) => {
-      const month = MONTHS[parseInt(row.date.slice(3, 5), 10) - 1];
+      const month = MONTHS[row.date.getUTCMonth()];
 
       acc[month] = (acc[month] || 0) + reducer(row);
 
