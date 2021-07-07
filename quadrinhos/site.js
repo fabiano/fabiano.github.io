@@ -1,7 +1,8 @@
 const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-(async function() {
+window.onload = window.onpopstate = init;
 
+async function init() {
   const today = new Date();
   let year = today.getFullYear();
 
@@ -23,8 +24,7 @@ const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Jul
   render(transform(await get(year)));
 
   document.body.classList.remove("is-loading");
-
-}());
+}
 
 async function get(year) {
   console.time("get");
