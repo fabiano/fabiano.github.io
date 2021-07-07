@@ -194,7 +194,7 @@ function renderRows(rows) {
 
     card.className = "card";
 
-    if (date === "") {
+    if (date === null) {
       card.classList.add("has-ribbon");
       card.classList.add("is-reading");
 
