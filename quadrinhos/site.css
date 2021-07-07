@@ -3,7 +3,7 @@
 :root {
   --text-color: #383838;
   --link-color: #3273dc;
-  --primary-color: #00d1b2;
+  --primary-color: #4cdec9;
 }
 
 /* css reset from https://github.com/vladocar/CSS-Mini-Reset */
@@ -164,7 +164,7 @@ body.is-loading .progress {
 }
 
 .chart .data-serie .label {
-  color: #fff;
+  color: #00927c;
   font-size: 1.2rem;
   height: 20px;
   left: 15px;
@@ -176,7 +176,7 @@ body.is-loading .progress {
 
 .chart .data-serie .label::before {
   background-color: #fff;
-  border-color: transparent var(--primary-color);
+  border-color: transparent #4cdec9;
   border-style: solid;
   border-width: 10px 10px 10px 0;
   box-sizing: border-box;
@@ -187,11 +187,11 @@ body.is-loading .progress {
 }
 
 .chart .data-serie.is-zero .label::before {
-  border-color: transparent #eee;
+  border-color: transparent #e5faf7;
 }
 
 .chart .data-serie .value {
-  color: #fff;
+  color: #00927c;
   font-size: 1.2rem;
   height: 20px;
   line-height: 20px;
@@ -211,15 +211,15 @@ body.is-loading .progress {
 }
 
 .chart .data-serie .bar::-moz-progress-bar {
-  background-color: var(--primary-color);
+  background-color: #4cdec9;
 }
 
 .chart .data-serie .bar::-webkit-progress-bar {
-  background-color: #eee;
+  background-color: #e5faf7;
 }
 
 .chart .data-serie .bar::-webkit-progress-value {
-  background-color: var(--primary-color);
+  background-color: #4cdec9;
 }
 
 /* cards */
