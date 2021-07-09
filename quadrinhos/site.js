@@ -42,7 +42,7 @@ function transform(rows) {
 
   const tmp = rows.map((row, index) => {
     const {
-      date, publisher, title, pages, issues, format, href = "#"
+      date, publisher, title, pages, issues, format, link = "#"
      } = row;
 
     return {
@@ -53,7 +53,7 @@ function transform(rows) {
       pages: pages,
       issues: issues,
       format,
-      href,
+      link,
     };
   });
 
@@ -138,7 +138,7 @@ function renderRows(rows) {
 
   const fragment = document.createDocumentFragment();
 
-  for (const { number, date, publisher, title, pages, issues, format, href } of rows) {
+  for (const { number, date, publisher, title, pages, issues, format, link } of rows) {
     const cardHeaderNumber = document.createElement("div");
 
     cardHeaderNumber.className = "number";
@@ -159,7 +159,7 @@ function renderRows(rows) {
 
     const cardBodyTitleAnchor = document.createElement("a");
 
-    cardBodyTitleAnchor.href = href;
+    cardBodyTitleAnchor.href = link;
     cardBodyTitleAnchor.textContent = title;
 
     const cardBodyTitle = document.createElement("div");
