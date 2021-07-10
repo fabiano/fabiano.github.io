@@ -1,10 +1,10 @@
 const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const TODAY = new Date();
 
 window.onload = window.onpopstate = init;
 
 async function init() {
-  const today = new Date();
-  let year = today.getFullYear();
+  let year = TODAY.getUTCFullYear();
 
   // Try to get the year from the URL
   if (window.location.hash) {
@@ -37,13 +37,13 @@ async function get(year) {
   return json;
 }
 
-function transform(rows) {
+function transform(comicBooks) {
   console.time("transform");
 
-  const tmp = rows.map((row, index) => {
+  const arr = comicBooks.map((comicBook, index) => {
     const {
       date, publisher, title, pages, issues, format, link = "#"
-     } = row;
+     } = comicBook;
 
     return {
       number: index + 1,
@@ -59,183 +59,125 @@ function transform(rows) {
 
   console.timeEnd("transform");
 
-  return tmp;
+  return arr;
 }
 
-function render(rows) {
+function render(comicBooks) {
   console.time("render");
 
-  const read = rows.filter(row => row.date);
-
-  renderStats(read);
+  renderStats(comicBooks);
   renderEmptyChart();
-  renderRows(rows);
+  renderCards(comicBooks);
 
   console.timeEnd("render");
 }
 
-function renderStats(rows) {
-  const today = new Date();
-  const month = today.getMonth() + 1;
-  const add = (x, y) => x + y;
-
+function renderStats(comicBooks) {
   console.time("render stats");
+
+  const data = comicBooks.filter(comicBook => comicBook.date);
+  const totalOfPages = data.reduce((acc, comicBook) => acc + comicBook.pages, 0);
+  const totalOfIssues = data.reduce((acc, comicBook) => acc + comicBook.issues, 0);
 
   const statsTotal = document.getElementById("stats-total");
 
-  statsTotal.textContent = rows.length;
-  statsTotal.addEventListener("click", () => renderChart(rows, () => 1));
+  statsTotal.textContent = data.length;
+  statsTotal.addEventListener("click", () => renderChart(data, () => 1));
 
   const statsPaper = document.getElementById("stats-paper");
 
-  statsPaper.textContent = rows
-    .filter(row => row.format !== "Digital")
+  statsPaper.textContent = data
+    .filter(comicBook => comicBook.format !== "Digital")
     .length;
 
-  statsPaper.addEventListener("click", () => renderChart(rows, row => row.format !== "Digital" ? 1 : 0));
+  statsPaper.addEventListener("click", () => renderChart(data, comicBook => comicBook.format !== "Digital" ? 1 : 0));
 
   const statsDigital = document.getElementById("stats-digital");
 
-  statsDigital.textContent = rows
-    .filter(row => row.format === "Digital")
+  statsDigital.textContent = data
+    .filter(comicBook => comicBook.format === "Digital")
     .length;
 
-  statsDigital.addEventListener("click", () => renderChart(rows, row => row.format === "Digital" ? 1 : 0));
+  statsDigital.addEventListener("click", () => renderChart(data, comicBook => comicBook.format === "Digital" ? 1 : 0));
 
   const statsPages = document.getElementById("stats-pages");
 
-  const totalOfPages = rows
-    .map(row => row.pages)
-    .reduce(add, 0);
-
   statsPages.textContent = totalOfPages;
-
-  statsPages.addEventListener("click", () => renderChart(rows, row => row.pages));
+  statsPages.addEventListener("click", () => renderChart(data, comicBook => comicBook.pages));
 
   const statsIssues = document.getElementById("stats-issues");
 
-  const totalOfIssues = rows
-    .map(row => row.issues)
-    .reduce(add, 0);
-
   statsIssues.textContent = totalOfIssues;
-
-  statsIssues.addEventListener("click", () => renderChart(rows, row => row.issues));
+  statsIssues.addEventListener("click", () => renderChart(data, comicBook => comicBook.issues));
 
   const statsPagesPerMonth = document.getElementById("stats-pages-per-month");
 
-  statsPagesPerMonth.textContent = Math.round(totalOfPages / month);
+  statsPagesPerMonth.textContent = Math.round(totalOfPages / (TODAY.getUTCMonth() + 1));
 
   const statsIssuesPerMonth = document.getElementById("stats-issues-per-month");
 
-  statsIssuesPerMonth.textContent = Math.round(totalOfIssues / month);
+  statsIssuesPerMonth.textContent = Math.round(totalOfIssues / (TODAY.getUTCMonth() + 1));
 
   console.timeEnd("render stats");
 }
 
-function renderRows(rows) {
-  console.time("render rows");
+function renderCards(comicBooks) {
+  console.time("render cards");
 
   const fragment = document.createDocumentFragment();
+  const template = document.getElementById("card");
 
-  for (const { number, date, publisher, title, pages, issues, format, link } of rows) {
-    const cardHeaderNumber = document.createElement("div");
-
-    cardHeaderNumber.className = "number";
-    cardHeaderNumber.textContent = `#${number}`;
-
-    const cardHeaderDate = document.createElement("div");
-
-    cardHeaderDate.className = "date";
-
-    cardHeaderDate.textContent = date
-      ? `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`
-      : "...";
-
-    const cardHeader = document.createElement("div");
-
-    cardHeader.appendChild(cardHeaderNumber);
-    cardHeader.appendChild(cardHeaderDate);
-
-    const cardBodyTitleAnchor = document.createElement("a");
-
-    cardBodyTitleAnchor.href = link;
-    cardBodyTitleAnchor.textContent = title;
-
-    const cardBodyTitle = document.createElement("div");
-
-    cardBodyTitle.className = "title";
-
-    cardBodyTitle.appendChild(cardBodyTitleAnchor);
-
-    const cardBodyPublisherAndFormat = document.createElement("div");
-
-    cardBodyPublisherAndFormat.className = "publisher-and-format";
-    cardBodyPublisherAndFormat.textContent = `${publisher} / ${format}`;
-
-    const cardBody = document.createElement("div");
-
-    cardBody.appendChild(cardBodyTitle);
-    cardBody.appendChild(cardBodyPublisherAndFormat);
-
-    const cardFooterPagesAndIssues = document.createElement("div");
-
-    cardFooterPagesAndIssues.className = "pages-and-issues";
-
-    cardFooterPagesAndIssues.textContent = issues > 1
-      ? `${pages} páginas e ${issues} edições`
-      : `${pages} páginas e ${issues} edição`;
-
-    const cardFooter = document.createElement("div");
-
-    cardFooter.appendChild(cardFooterPagesAndIssues);
-
-    const card = document.createElement("div");
-
-    card.className = "card";
+  for (const { number, date, publisher, title, pages, issues, format, link } of comicBooks) {
+    const card = template.content.cloneNode(true);
 
     if (date === null) {
-      card.classList.add("has-ribbon");
-      card.classList.add("is-reading");
-
-      const cardRibbon = document.createElement("div");
-
-      cardRibbon.className = "ribbon";
-      cardRibbon.textContent = "Lendo";
-
-      card.appendChild(cardRibbon);
+      card.firstElementChild.classList.add("has-ribbon");
     }
 
-    card.appendChild(cardHeader);
-    card.appendChild(cardBody);
-    card.appendChild(cardFooter);
+    const cardNumber = card.querySelector(".number");
+
+    cardNumber.textContent = `#${number}`;
+
+    const cardDate = card.querySelector(".date");
+
+    cardDate.textContent = date
+        ? `${String(date.getUTCDate()).padStart(2, "0")}/${String(date.getUTCMonth() + 1).padStart(2, "0")}/${date.getUTCFullYear()}`
+        : "...";
+
+    const cardTitle = card.querySelector(".title a");
+
+    cardTitle.href = link;
+    cardTitle.textContent = title;
+
+    const cardPublisherAndFormat = card.querySelector(".publisher-and-format");
+
+    cardPublisherAndFormat.textContent = `${publisher} / ${format}`;
+
+    const cardPageAndIssues = card.querySelector(".pages-and-issues");
+
+    cardPageAndIssues.textContent = issues > 1
+        ? `${pages} páginas e ${issues} edições`
+        : `${pages} páginas e ${issues} edição`;
 
     fragment.insertBefore(card, fragment.firstChild);
   }
 
-  const cards = document.createElement("div");
+  const cards = document.getElementById("cards");
 
-  cards.id = "cards";
-  cards.className = "cards";
+  cards.replaceChildren(fragment);
 
-  cards.appendChild(fragment);
-
-  document
-    .getElementById("cards")
-    .replaceWith(cards);
-
-  console.timeEnd("render rows");
+  console.timeEnd("render cards");
 }
 
-function renderChart(rows, reducer) {
+function renderChart(comicBooks, reducer) {
   console.time("render chart");
 
-  const data = rows
-    .filter(row => row.date)
-    .reduce((acc, row) => {
-      const month = MONTHS[row.date.getUTCMonth()];
+  const data = comicBooks
+    .filter(comicBook => comicBook.date)
+    .reduce((acc, comicBook) => {
+      const month = MONTHS[comicBook.date.getUTCMonth()];
 
-      acc[month] = (acc[month] || 0) + reducer(row);
+      acc[month] = (acc[month] || 0) + reducer(comicBook);
 
       return acc;
     }, {});
@@ -245,61 +187,40 @@ function renderChart(rows, reducer) {
     .reduce((acc, value) => value > acc ? value : acc, 0);
 
   const fragment = document.createDocumentFragment();
+  const template = document.getElementById("data-serie");
 
   for (const key in data) {
     const value = data[key];
-    const dataSerieLabel = document.createElement("span");
-
-    dataSerieLabel.className = "label";
-    dataSerieLabel.textContent = key;
-
-    const dataSerieValue = document.createElement("span");
-
-    dataSerieValue.className = "value";
-    dataSerieValue.textContent = value;
-
-    const dataSerieBar = document.createElement("progress");
-
-    dataSerieBar.className = "bar";
-    dataSerieBar.value = value;
-    dataSerieBar.max = highest;
-
-    const dataSerie = document.createElement("div");
-
-    dataSerie.className = "data-serie";
+    const dataSerie = template.content.cloneNode(true);
 
     if (value === 0) {
-      dataSerie.classList.add("is-zero")
+      dataSerie.firstElementChild.classList.add("is-zero")
     }
 
-    dataSerie.appendChild(dataSerieLabel);
-    dataSerie.appendChild(dataSerieValue);
-    dataSerie.appendChild(dataSerieBar);
+    const dataSerieLabel = dataSerie.querySelector(".label");
+
+    dataSerieLabel.textContent = key;
+
+    const dataSerieValue = dataSerie.querySelector(".value");
+
+    dataSerieValue.textContent = value;
+
+    const dataSerieBar = dataSerie.querySelector(".bar");
+
+    dataSerieBar.value = value;
+    dataSerieBar.max = highest;
 
     fragment.appendChild(dataSerie);
   }
 
-  const chart = document.createElement("div");
-
-  chart.id = "chart";
-  chart.className = "chart";
-
-  chart.appendChild(fragment);
-
-  document
-    .getElementById("chart")
-    .replaceWith(chart);
+  chart.replaceChildren(fragment);
 
   console.timeEnd("render chart");
 }
 
 function renderEmptyChart() {
-  const emptyChart = document.createElement("div");
+  const emptyFragment = document.createDocumentFragment();
+  const chart = document.getElementById("chart");
 
-  emptyChart.id = "chart";
-  emptyChart.className = "chart";
-
-  document
-    .getElementById("chart")
-    .replaceWith(emptyChart);
+  chart.replaceChildren(emptyFragment);
 }

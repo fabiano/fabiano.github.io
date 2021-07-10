@@ -187,7 +187,7 @@ body.is-loading .progress {
 }
 
 .chart .data-serie.is-zero .label::before {
-  border-color: transparent #e5faf7;
+  border-color: transparent #eee;
 }
 
 .chart .data-serie .value {
@@ -263,10 +263,6 @@ body.is-loading .progress {
   transform-origin: left;
   transform: rotate(-45deg);
   width: 100px;
-}
-
-.cards .card.has-ribbon .ribbon.is-reading {
-  background-color: var(--primary-color);
 }
 
 .cards .card .ribbon {
