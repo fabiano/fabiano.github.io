@@ -29,7 +29,7 @@ async function init() {
 async function get(year) {
   console.time("get");
 
-  const response = await fetch("https://quadrinhos.herokuapp.com/" + year);
+  const response = await fetch("https://quadrinhos-xmu2mzvdvq-uc.a.run.app/" + year);
   const json = await response.json();
 
   console.timeEnd("get");
@@ -149,7 +149,7 @@ function renderRows(rows) {
     cardHeaderDate.className = "date";
 
     cardHeaderDate.textContent = date
-      ? date.toLocaleDateString("pt-BR", { year: "numeric", month: "numeric", day: "numeric", timeZone: "UTC" })
+      ? `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`
       : "...";
 
     const cardHeader = document.createElement("div");
