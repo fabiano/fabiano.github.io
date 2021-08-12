@@ -29,7 +29,7 @@ async function init() {
 async function get(year) {
   console.time("get");
 
-  const response = await fetch("https://quadrinhos-xmu2mzvdvq-uc.a.run.app/" + year);
+  const response = await fetch("https://quadrinhos-xmu2mzvdvq-uw.a.run.app/" + year);
   const json = await response.json();
 
   console.timeEnd("get");
