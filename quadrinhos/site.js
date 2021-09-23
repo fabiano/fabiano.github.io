@@ -76,15 +76,16 @@ function renderStats(comicBooks) {
   console.time("render stats");
 
   const data = comicBooks.filter(comicBook => comicBook.date);
-  const totalOfPages = data.reduce((acc, comicBook) => acc + comicBook.pages, 0);
-  const totalOfIssues = data.reduce((acc, comicBook) => acc + comicBook.issues, 0);
-
   const statsTotal = document.getElementById("stats-total");
+  const statsPaper = document.getElementById("stats-paper");
+  const statsDigital = document.getElementById("stats-digital");
+  const statsPages = document.getElementById("stats-pages");
+  const statsIssues = document.getElementById("stats-issues");
+  const statsPagesPerMonth = document.getElementById("stats-pages-per-month");
+  const statsIssuesPerMonth = document.getElementById("stats-issues-per-month");
 
   statsTotal.textContent = data.length;
   statsTotal.addEventListener("click", () => renderChart(data, () => 1));
-
-  const statsPaper = document.getElementById("stats-paper");
 
   statsPaper.textContent = data
     .filter(comicBook => comicBook.format !== "Digital")
@@ -92,30 +93,22 @@ function renderStats(comicBooks) {
 
   statsPaper.addEventListener("click", () => renderChart(data, comicBook => comicBook.format !== "Digital" ? 1 : 0));
 
-  const statsDigital = document.getElementById("stats-digital");
-
   statsDigital.textContent = data
     .filter(comicBook => comicBook.format === "Digital")
     .length;
 
   statsDigital.addEventListener("click", () => renderChart(data, comicBook => comicBook.format === "Digital" ? 1 : 0));
 
-  const statsPages = document.getElementById("stats-pages");
+  const totalOfPages = data.reduce((acc, comicBook) => acc + comicBook.pages, 0);
+  const totalOfIssues = data.reduce((acc, comicBook) => acc + comicBook.issues, 0);
 
   statsPages.textContent = totalOfPages;
   statsPages.addEventListener("click", () => renderChart(data, comicBook => comicBook.pages));
 
-  const statsIssues = document.getElementById("stats-issues");
-
   statsIssues.textContent = totalOfIssues;
   statsIssues.addEventListener("click", () => renderChart(data, comicBook => comicBook.issues));
 
-  const statsPagesPerMonth = document.getElementById("stats-pages-per-month");
-
   statsPagesPerMonth.textContent = Math.round(totalOfPages / (TODAY.getUTCMonth() + 1));
-
-  const statsIssuesPerMonth = document.getElementById("stats-issues-per-month");
-
   statsIssuesPerMonth.textContent = Math.round(totalOfIssues / (TODAY.getUTCMonth() + 1));
 
   console.timeEnd("render stats");
@@ -135,25 +128,20 @@ function renderCards(comicBooks) {
     }
 
     const cardNumber = card.querySelector(".number");
+    const cardDate = card.querySelector(".date");
+    const cardTitle = card.querySelector(".title a");
+    const cardPublisherAndFormat = card.querySelector(".publisher-and-format");
+    const cardPageAndIssues = card.querySelector(".pages-and-issues");
 
     cardNumber.textContent = `#${number}`;
-
-    const cardDate = card.querySelector(".date");
 
     cardDate.textContent = date
         ? `${String(date.getUTCDate()).padStart(2, "0")}/${String(date.getUTCMonth() + 1).padStart(2, "0")}/${date.getUTCFullYear()}`
         : "...";
 
-    const cardTitle = card.querySelector(".title a");
-
     cardTitle.href = link;
     cardTitle.textContent = title;
-
-    const cardPublisherAndFormat = card.querySelector(".publisher-and-format");
-
     cardPublisherAndFormat.textContent = `${publisher} / ${format}`;
-
-    const cardPageAndIssues = card.querySelector(".pages-and-issues");
 
     cardPageAndIssues.textContent = issues > 1
         ? `${pages} páginas e ${issues} edições`
@@ -198,15 +186,11 @@ function renderChart(comicBooks, reducer) {
     }
 
     const dataSerieLabel = dataSerie.querySelector(".label");
-
-    dataSerieLabel.textContent = key;
-
     const dataSerieValue = dataSerie.querySelector(".value");
-
-    dataSerieValue.textContent = value;
-
     const dataSerieBar = dataSerie.querySelector(".bar");
 
+    dataSerieLabel.textContent = key;
+    dataSerieValue.textContent = value;
     dataSerieBar.value = value;
     dataSerieBar.max = highest;
 
